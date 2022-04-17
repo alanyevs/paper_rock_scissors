@@ -1,0 +1,20 @@
+.content{
+    border-radius: 25px;
+    background-color:white;
+}
+
+.content .row:nth-child(even){
+    background-color: #9c9fa6;
+    overflow: hidden;
+}
+
+
+.content .row:nth-child(odd){
+    background-color: #cfd0d3;
+    overflow: hidden;
+}
+
+.search{
+    border-style: solid;
+    border-radius: 10px;
+}
