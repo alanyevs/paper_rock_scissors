@@ -10,7 +10,7 @@ let data=[
 let update_time = "Feb 27, 2022 16:30PM (EST)"
 
 $(document).ready(function(){
-    $("#last_update").html(update_time)
+    $("#last_update").html("Last update: "+update_time)
     $.each(data, function(i, d){
         let r = $("<div class='row'>")
         let c = $("<div class='col-1'>")
