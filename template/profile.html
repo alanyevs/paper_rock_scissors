@@ -20,8 +20,27 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
+
+    <script type="text/javascript" src="../static/sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="../static/sdk/apigClient.js"></script>
+    <script type="text/javascript" src="../static/aws-sdk.min.js"></script>
+
+    <script>
+        var sdk = apigClientFactory.newClient({});
+    </script>
+
     <script type="text/javascript" src="../static/all.js"></script>
     <script type="text/javascript" src="../static/profile.js"></script>
+
     <title>Profile</title>
 </head>
 
@@ -72,10 +91,10 @@
                     </h1>
                 </div>
                 <div class="row mx-2">
-                    <span> Winning rate: <span id="total_wr"></span> </span>
+                    <span> Games Winned: <span id="win_count"></span> </span>
                 </div>
                 <div class="row mx-2">
-                    <span> Games: <span id="games"></span> </span>
+                    <span> Games Played: <span id="game_count"></span> </span>
                 </div>
             </div>
             <div class="col-2 mx-5">
