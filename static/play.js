@@ -25,7 +25,7 @@ $(document).ready(function(){
             $(".option").css("visibility","visible")
             $(".option").click(option_click)
 
-            $("#opponent_score").attr("src",sucai_path+"/score"+status.opponent_score+".png")
+            $("#opponent_score").attr("src",sucai_path+"/score"+status.op_score+".png")
             $("#my_score").attr("src",sucai_path+"/score"+status.my_score+".png")
 
             round = status.round

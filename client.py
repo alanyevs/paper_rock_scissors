@@ -5,9 +5,9 @@ import json
 
 # GameID = str(uuid.uuid4())
 # PlayerID = str(uuid.uuid4())
-GameID0 = "abc"
+GameID0 = "abcdef"
 PlayerID0 = 'c5a0a4cc-5f15-4218-8b4c-71f2768726ee'
-new_action = "paper"
+new_action = "rock"
 Round0 = str(1)
 
 # Constants Copied from AppSync API 'Settings'
