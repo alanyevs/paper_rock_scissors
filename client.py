@@ -5,8 +5,10 @@ import json
 
 # GameID = str(uuid.uuid4())
 # PlayerID = str(uuid.uuid4())
-GameID = "abc"
-PlayerID = 'c5a0a4cc-5f15-4218-8b4c-71f2768726ee'
+GameID0 = "abc"
+PlayerID0 = 'c5a0a4cc-5f15-4218-8b4c-71f2768726ee'
+new_action = "paper"
+Round0 = str(1)
 
 # Constants Copied from AppSync API 'Settings'
 API_URL = "https://pghvue5ynvgxhj2inkeou75hay.appsync-api.us-east-1.amazonaws.com/graphql"
@@ -14,25 +16,32 @@ API_KEY = "da2-afgsjsfxyregnltlv7frqf5wnq"
 
 HOST = API_URL.replace('https://','').replace('/graphql','')
 
-conn = http.client.HTTPSConnection(HOST, 443)
 headers = {
-    'Content-type': 'application/graphql', 
-    'x-api-key': API_KEY,
-    'host': HOST
-}
+            'Content-type': 'application/graphql', 
+            'x-api-key': API_KEY,
+            'host': HOST
+        }
 
-new_action = "rock"
-Round = str(1)
+class play_send_socket():
+    def __init__(self):
+        self.conn = http.client.HTTPSConnection(HOST, 443)
+        
+    def send(self, playerid, gameid, round, action):
 
-graphql_mutation = {
-    'query': 'mutation($in:UpdateActionInput!){updateAction(input:$in){PlayerID GameID Round Action}}',
-    'variables': '{ "in": {"PlayerID":"'+ PlayerID +'", "GameID":"'+ GameID +'", "Round":"'+ Round +'", "Action":"'+ new_action +'"} }'
-}
-mutation_data = json.dumps(graphql_mutation)
 
-# Now Perform the Mutation
-conn.request('POST', '/graphql', mutation_data, headers)
-response = conn.getresponse()
+        graphql_mutation = {
+            'query': 'mutation($in:UpdateActionInput!){updateAction(input:$in){PlayerID GameID Round Action}}',
+            'variables': '{ "in": {"PlayerID":"'+ playerid +'", "GameID":"'+ gameid +'", "Round":"'+ round +'", "Action":"'+ action +'"} }'
+        }
+        mutation_data = json.dumps(graphql_mutation)
 
-response_string = response.read().decode('utf-8')
-print(response_string)
+        # Now Perform the Mutation
+        self.conn.request('POST', '/graphql', mutation_data, headers)
+        response = self.conn.getresponse()
+
+        response_string = response.read().decode('utf-8')
+        print(response_string)
+
+if __name__ == "__main__":
+    x = play_send_socket()
+    x.send(PlayerID0,GameID0,Round0,new_action)

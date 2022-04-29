@@ -47,7 +47,7 @@ def reset_timer( ws ):
     timeout_timer.daemon = True
     timeout_timer.start()
 
-# Create API key authentication header
+# Create API key oentication header
 api_header = {
     'host':HOST,
     'x-api-key':API_KEY
@@ -86,18 +86,19 @@ def on_message_id(id, emit_func):
                 'type': 'start'
             }
             start_sub = json.dumps(register)
-            print('>> '+ start_sub )
+            # print('>> '+ start_sub )
             ws.send(start_sub)
 
         elif(message_type == 'data'):
-            deregister = {
-                'type': 'stop',
-                'id': id
-            }
+            # deregister = {
+            #     'type': 'stop',
+            #     'id': id
+            # }
             emit_func(message_object)
-            end_sub = json.dumps(deregister)
-            print('>> ' + end_sub )
-            ws.send(end_sub)
+            print(message_object)
+            # end_sub = json.dumps(deregister)
+            # # print('>> ' + end_sub )
+            # ws.send(end_sub)
 
         elif(message_object['type'] == 'error'):
             print ('Error from AppSync: ' + message_object['payload'])
@@ -116,7 +117,7 @@ def on_open(ws):
         'type': 'connection_init'
     }
     init_conn = json.dumps(init)
-    print('>> '+ init_conn)
+    # print('>> '+ init_conn)
     ws.send(init_conn)
 
 
@@ -134,7 +135,7 @@ print( 'Connecting to: ' + connection_url )
 
 
 
-class play_socket():
+class play_listen_socket():
     def __init__(self, id, f):
         self.ws = websocket.WebSocketApp( connection_url,
                             subprotocols=['graphql-ws'],
