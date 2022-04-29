@@ -31,33 +31,44 @@ let data=[
     }
 ]
 
+socket.on("list_rooms_results", (rooms) => {
+    console.log(rooms);
+    var rooms = JSON.parse(rooms);
+
+    for (let i = 0; i < rooms.length; i++) {
+        var room = rooms[i];
+        var playerIDs = room.PlayerIDs.split(',');
+        var len = playerIDs.length;
+        // TODO: get user name according to the playerID
+        var r = $("<div class='row'>");
+        var c = $("<div class='col-1'>");
+        c.html(i.toString());
+        r.append(c);
+        c = $("<div class='col-2'>");
+        c.html(playerIDs[0]);
+        r.append(c);
+        c = $("<div class='col-2'>");
+        c.html(len.toString() + "/" + room.Capacity);
+        r.append(c);
+        c = $("<div class='col-2'>");
+        c.html(room.Status);
+        r.append(c);
+        $("#lobby_container").append(r);
+    }
+});
+
 $(document).ready(function(){
     // Get query parameters
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const code = urlParams.get('code');
     // TODO: Load avatar
-    getUser(code)
-    .then((response) => {
-        console.log(response);
-    })
-    .then ((error) => {
-        console.log(error);
-    });
-    $.each(data, function(i, d){
-        let r = $("<div class='row'>")
-        let c = $("<div class='col-1'>")
-        c.html(d.roomid)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.creator)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.people)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.game)
-        r.append(c)
-        $("#lobby_container").append(r)
-    })
+    // getUser(code)
+    // .then((response) => {
+    //     console.log(response);
+    // })
+    // .then ((error) => {
+    //     console.log(error);
+    // });
+    socket.emit("list_rooms", {"PlayerID": 'c5a0a4cc-5f15-4218-8b4c-71f2768726ee', "Capacity": "2"});
 })

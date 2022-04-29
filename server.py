@@ -1,9 +1,11 @@
 from flask import Flask
 from flask import render_template
-from flask import Response, request, jsonify
+from flask import Response, request, jsonify, redirect
 from flask_socketio import SocketIO, emit
 from listener import play_socket
 from threading import Lock
+from room import *
+import json
 
 app = Flask(__name__)
 
@@ -21,8 +23,8 @@ def play_event_listener():
     socket = play_socket('c5a0a4cc-5f15-4218-8b4c-71f2768726ee', data_emitter)
     socket.start()
 
-def play_event_updater(json):
-    print('received json: ' + str(json))
+def play_event_updater(data):
+    print('received json: ' + str(data))
     pass
 
 # ROUTES
@@ -40,8 +42,8 @@ def play():
    return render_template('play.html')
 
 @socketio.on('my_action')
-def handle_my_action(json):
-    play_event_updater(json)
+def handle_my_action(data):
+    play_event_updater(data)
 
 @app.route('/result')
 def game_result():
@@ -53,7 +55,7 @@ def lobby():
 
 @app.route('/create')
 def create_game():
-   return render_template('leaderboard.html')
+   return render_template('create.html')
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -66,6 +68,19 @@ def profile():
 @app.route('/friend')
 def friend():
    return render_template('friend.html')
+
+######################### helper functions of lobby #########################
+@socketio.on('create_room')
+def create(data):
+   playerID = data['PlayerID']
+   capacity = data['Capacity']
+   gameID = str(uuid.uuid4())
+   create_room(gameID, playerID, capacity)
+
+@socketio.on("list_rooms")
+def list(data):
+   rooms = list_rooms()
+   socketio.emit("list_rooms_results", json.dumps(rooms))
 
 @socketio.event
 def connect():

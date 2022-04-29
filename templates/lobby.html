@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
-{% block title %} 
+{% block head %} 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script> let socket = io(); </script>
     <script type="text/javascript" src="../static/lobby.js"></script>
     <title>Lobby</title>
 {% endblock %}
@@ -40,18 +42,18 @@
             <div class="col-1"> RoomID </div>
             <div class="col-2"> Creator </div>
             <div class="col-2"> People </div>
-            <div class="col-2"> Game </div>
+            <div class="col-2"> Status </div>
         </div>
     </div>
 
 
     <div class="container content shadow mt-1" id="lobby_container">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-1"> 10086 </div>
             <div class="col-2"> alanyevs </div>
             <div class="col-2"> 1/2 </div>
             <div class="col-2"> PSR </div>
-        </div>
+        </div> -->
     </div>
 
 </div>
