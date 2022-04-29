@@ -6,6 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script>
         let socket = io();
+        let round = '1';
         let options_elements = `
             <div class="row" style="height: 20px;"></div>
             <div class="row">
@@ -51,7 +52,7 @@
 <div class="container">
     <div class="row text-center mt-3" style="font-size: 50pt; font-weight: bold;">
         <span>
-            ROUND 4
+            ROUND <span id="round_number">1</span>
         </span>
     </div>
     <div class="row mt-3" style="height: 200px;">
@@ -122,13 +123,13 @@
         <div class="mx-5 col-6 border border-2 border-dark rounded-9 shadow" id="me_action_container">
             <div class="row" style="height: 20px;"></div>
             <div class="row">
-                <div class="col-4 option" id="paper_option">
+                <div class="col-4 option" id="paper_option" op="paper">
                     <img src="{{url_for('static', filename='sucai/paper.svg')}}" alt="" width="100%" height="180px">
                 </div>
-                <div class="col-4 option" id="scissors_option">
+                <div class="col-4 option" id="scissors_option" op="scissors">
                     <img src="{{url_for('static', filename='sucai/scissors.svg')}}" alt="" width="100%" height="180px">
                 </div>
-                <div class="col-4 option" id="rock_option">
+                <div class="col-4 option" id="rock_option" op="rock">
                     <img src="{{url_for('static', filename='sucai/rock.svg')}}" alt="" width="100%" height="180px">
                 </div>
             </div>

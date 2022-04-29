@@ -2,30 +2,82 @@ from flask import Flask
 from flask import render_template
 from flask import Response, request, jsonify, redirect
 from flask_socketio import SocketIO, emit
-from listener import play_socket
-from threading import Lock
 from room import *
 import json
+from listener import play_listen_socket
+from client import play_send_socket
+from threading import Lock, Thread
+import uuid
 
 app = Flask(__name__)
 
 async_mode = None
-socketio = SocketIO(app, async_mode=None)
-thread = None
-thread_lock = Lock()
+socketio = SocketIO(app ,async_mode="threading")
+op_thread = None
+op_thread_lock = Lock()
+my_thread = None
+my_thread_lock = Lock()
+
+status_lock = Lock()
+current_game_status = {str(k):dict() for k in range(1,10)}
 
 
-def play_event_listener():
-    def data_emitter(message):
-        socketio.emit("test",message)
-        op = message["payload"]["data"]["onUpdateAction"]["Action"]
-        socketio.emit('play_status', {"opponent":op,"me":"waiting","opponent_score":"1","my_score":"2"})
-    socket = play_socket('c5a0a4cc-5f15-4218-8b4c-71f2768726ee', data_emitter)
+op_id = "c5a0a4cc-5f15-4218-8b4c-71f2768726ee"
+my_id = "17f2cb34-97a4-42d8-85f4-4de55c34b74f"
+game_id = "abcdef"
+
+
+send_play = play_send_socket()
+
+
+def compute_game_status(status, round):
+    psr_rule = {'paper':'scissors','scissors':'rock','rock':'paper'}
+    my_score = 0
+    op_score = 0
+    for i in range(1, int(round)+1):
+        x = status[str(i)]
+        if x["opponent"] != x["me"]:
+            if psr_rule[x["opponent"]] == x["me"]:
+                my_score += 1
+            else:
+                op_score += 1
+
+    res = ''
+    x = status[round]
+    if x["opponent"] != x["me"]:
+        res = "draw"
+        if psr_rule[x["opponent"]] == x["me"]:
+            res="win"
+        else:
+            res="lose"
+    
+    return {"my_score":str(my_score), "op_score":str(op_score), "round":str(int(round)+1), "res":res, "op_action":x["opponent"]}
+
+
+def action_listener(op_id, my_id, game_id):
+    def store_action(message):
+        if message["payload"]["data"]["onUpdateAction"]["GameID"] != game_id:
+            return
+        global current_game_status
+        action = message["payload"]["data"]["onUpdateAction"]["Action"]
+        round = message["payload"]["data"]["onUpdateAction"]["Round"]
+        if message["payload"]["data"]["onUpdateAction"]["PlayerID"] == op_id:
+            player = "opponent" 
+        elif message["payload"]["data"]["onUpdateAction"]["PlayerID"] == my_id:
+            player = "me"
+        else:
+            return
+
+        current_game_status[round][player] = action
+
+        print("listener: ", current_game_status)
+
+        if len(current_game_status[round]) == 2:
+            socketio.emit('play_status', compute_game_status(current_game_status, round))
+
+    register_id = str(uuid.uuid4())
+    socket = play_listen_socket(register_id, store_action)
     socket.start()
-
-def play_event_updater(data):
-    print('received json: ' + str(data))
-    pass
 
 # ROUTES
 
@@ -43,7 +95,8 @@ def play():
 
 @socketio.on('my_action')
 def handle_my_action(data):
-    play_event_updater(data)
+    # print("")
+    send_play.send(my_id, game_id, data["round"], data["action"])
 
 @app.route('/result')
 def game_result():
@@ -84,10 +137,13 @@ def list(data):
 
 @socketio.event
 def connect():
-    global thread 
-    with thread_lock:
-        if thread is None:
-            thread = socketio.start_background_task(target=play_event_listener)
+    global op_id
+    global my_id
+
+    global op_thread 
+    with op_thread_lock:
+        if op_thread is None:
+            op_thread = socketio.start_background_task(target=action_listener, op_id=op_id, my_id = my_id, game_id = game_id)
 
 
 if __name__ == '__main__':
