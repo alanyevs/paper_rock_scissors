@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <script type="text/javascript" src="../static/play.js"></script>
+    <link rel="stylesheet" href="../static/play.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script>
+        let socket = io();
+        let options_elements = `
+            <div class="row" style="height: 20px;"></div>
+            <div class="row">
+                <div class="col-4 option" id="paper_option" op="paper">
+                    <img src="{{url_for('static', filename='sucai/paper.svg')}}" alt="" width="100%" height="180px">
+                </div>
+                <div class="col-4 option" id="scissors_option" op="scissors">
+                    <img src="{{url_for('static', filename='sucai/scissors.svg')}}" alt="" width="100%" height="180px">
+                </div>
+                <div class="col-4 option" id="rock_option" op="rock">
+                    <img src="{{url_for('static', filename='sucai/rock.svg')}}" alt="" width="100%" height="180px">
+                </div>
+            </div>
+        `
+        let waiting_elements = `
+            <div class="row" style="height: 80px;"></div>
+            <div class="row text-center" style="font-size: 30pt;">
+                <span>
+                    Still Thinking...
+                </span>
+            </div>
+        `
+        let opponent_option_element = `
+            <div class="row" style="height: 20px;"></div>
+            <div class="row">
+                <div class="col-4" style="visibility:hidden;">
+                    <img src="{{url_for('static', filename='sucai/paper.svg')}}" alt="" width="100%" height="180px">
+                </div>
+                <div class="col-4">
+                    <img src="{{url_for('static', filename='sucai')}}" alt="" width="100%" height="180px" id="opponent_option">
+                </div>
+                <div class="col-4" style="visibility:hidden;">
+                    <img src="{{url_for('static', filename='sucai/rock.svg')}}" alt="" width="100%" height="180px">
+                </div>
+            </div>
+        `
+    </script>
+    <title>Play</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row text-center mt-3" style="font-size: 50pt; font-weight: bold;">
+        <span>
+            ROUND 4
+        </span>
+    </div>
+    <div class="row mt-3" style="height: 200px;">
+        <div class="offset-1 col-6 border border-2 border-dark rounded-9 shadow" id="opponent_action_container">
+            <div class="row" style="height: 80px;"></div>
+            <div class="row text-center" style="font-size: 30pt;">
+                <span>
+                    Still Thinking...
+                </span>
+            </div>
+        </div>
+        <div class="col-3 mx-5">
+            <div class="row" style="height: 30px;"></div>
+            <div class="row m-0 p-0" style="height: 100%;">
+                <div class="col-8 p-0" style="height: 100%;">
+                    <div class="row d-flex justify-content-center" style="height: 140px;">
+                        <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                            <img src="https://m.media-amazon.com/images/I/816p9XkbMQL._SL1427_.jpg" alt="" 
+                        style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                        </div>
+                    </div>
+                    <div class="row text-center" style="height: 60px;">
+                        <span style="font-size: 20pt;">alanyevs</span>
+                    </div>
+                </div>
+                <div class="col-3 p-0 m-0" style="height: 100%;">
+                    <div class="row" style="height: 50px;"></div>
+                    <img src="{{url_for('static', filename='sucai/score0.png')}}" alt="1" width="30px" id="opponent_score">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 80px;">
+        <div class="col-1 d-flex justify-content-end" style="font-size: 15pt;">
+            TIME:
+        </div>
+        <div class="col-10">
+            <div class="progress" style="height: 30px;">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="row mt-5" style="height: 200px;">
+        
+        <div class="offset-1 col-3">
+            <div class="row" style="height: 30px;"></div>
+            <div class="row m-0 p-0" style="height: 100%;">
+                <div class="col-8 p-0" style="height: 100%;">
+                    <div class="row d-flex justify-content-center" style="height: 140px;">
+                        <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                            <img src="https://m.media-amazon.com/images/I/816p9XkbMQL._SL1427_.jpg" alt="" 
+                        style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                        </div>
+                    </div>
+                    <div class="row text-center" style="height: 60px;">
+                        <span style="font-size: 20pt;">alanyevs</span>
+                    </div>
+                </div>
+                <div class="col-3 p-0 m-0" style="height: 100%;">
+                    <div class="row" style="height: 50px;"></div>
+                    <img src="{{url_for('static', filename='sucai/score0.png')}}" alt="1" width="30px" id="my_score">
+                </div>
+            </div>
+        </div>
+        <div class="mx-5 col-6 border border-2 border-dark rounded-9 shadow" id="me_action_container">
+            <div class="row" style="height: 20px;"></div>
+            <div class="row">
+                <div class="col-4 option" id="paper_option">
+                    <img src="{{url_for('static', filename='sucai/paper.svg')}}" alt="" width="100%" height="180px">
+                </div>
+                <div class="col-4 option" id="scissors_option">
+                    <img src="{{url_for('static', filename='sucai/scissors.svg')}}" alt="" width="100%" height="180px">
+                </div>
+                <div class="col-4 option" id="rock_option">
+                    <img src="{{url_for('static', filename='sucai/rock.svg')}}" alt="" width="100%" height="180px">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -11,7 +11,7 @@
         integrity="sha256-6XMVI0zB8cRzfZjqKcD01PBsAy3FlDASrlC8SxCpInY=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="a.css">
+    <link rel="stylesheet" href="../static/all.css">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
@@ -21,8 +21,23 @@
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
     <script type="text/javascript" src="../static/all.js"></script>
-    <script type="text/javascript" src="../static/lobby.js"></script>
-    <title>Lobby</title>
+    <script type="text/javascript" src="../static/sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="../static/sdk/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="../static/sdk/apigClient.js"></script>
+    <script type="text/javascript" src="../static/aws-sdk.min.js"></script>
+    <script>
+        let sucai_path = "{{url_for('static', filename='sucai')}}"
+        console.log(sucai_path)
+    </script>
+    {% block head %} <title>base</title> {% endblock %}
 </head>
 
 <body style="background-color:#fbf9f9">
@@ -39,13 +54,13 @@
             </a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="./lobby.html">Game</a>
+                    <a class="nav-link" href="/lobby">Game</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./leaderboard.html">Leaderboard</a>
+                    <a class="nav-link" href="/leaderboard">Leaderboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./friend.html">Friend</a>
+                    <a class="nav-link" href="/friend">Friend</a>
                 </li>
             </ul>
             <div class="d-flex align-items-center">
@@ -58,55 +73,7 @@
         </div>
     </nav>
 
-    <div class="container">
-        <h1 class="row display-5 d-flex justify-content-center mt-5">
-            Game Lobby
-        </h1>
-        <div class="row mt-5">
-            <div class="col-4">
-                <div class="input-group">
-                    <div class="form-inline">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    </div>
-                    <button type="button" class="btn btn-light">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="col-2 offset-6">
-                <button type="button" class="btn btn-outline-dark" onclick="location.href='./create.html'">Create</button>
-                <button type="button" class="btn btn-outline-dark" onclick="location.href='./lobby.html'">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
-                        <path
-                            d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
-                    </svg>
-                </button>
-            </div>
-
-        </div>
-        <div class="container">
-            <div class="row mt-3">
-                <div class="col-1"> RoomID </div>
-                <div class="col-2"> Creator </div>
-                <div class="col-2"> People </div>
-                <div class="col-2"> Game </div>
-            </div>
-        </div>
-
-
-        <div class="container content shadow mt-1" id="lobby_container">
-            <div class="row">
-                <div class="col-1"> 10086 </div>
-                <div class="col-2"> alanyevs </div>
-                <div class="col-2"> 1/2 </div>
-                <div class="col-2"> PSR </div>
-            </div>
-        </div>
-
-    </div>
+    {% block body %} {% endblock %}
 
 </body>
 
