@@ -1,9 +1,11 @@
 # 6998project
 
 ## requirement:
+Use Python 3.8
+
 pip install flask
 pip install flask-socketio
-pip install websocket
+pip install websocket-client
 
 ## usage:
 python server.py
