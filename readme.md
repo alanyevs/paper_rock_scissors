@@ -3,6 +3,7 @@
 ## requirement:
 pip install flask
 pip install flask-socketio
+pip install websocket
 
 ## usage:
 python server.py

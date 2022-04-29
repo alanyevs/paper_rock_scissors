@@ -6,6 +6,10 @@ function option_click(){
 }
 
 $(document).ready(function(){
+    socket.on('test', function(data) {
+        console.log(data)
+    })
+
     socket.on('play_status', function(status) {
         console.log(status)
         $("#opponent_action_container").empty()

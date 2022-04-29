@@ -2,7 +2,9 @@ from flask import Flask
 from flask import render_template
 from flask import Response, request, jsonify
 from flask_socketio import SocketIO, emit
+from listener import play_socket
 from threading import Lock
+
 app = Flask(__name__)
 
 async_mode = None
@@ -10,17 +12,14 @@ socketio = SocketIO(app, async_mode=None)
 thread = None
 thread_lock = Lock()
 
-def play_event_listener():
-    # fetch data
-    while True:
-        socketio.sleep(3)
-        a = input("input status:")
-        op, me, op_s, me_s = a.split()
-        #fectch data and compute
 
-        data = {"opponent":op,"me":me,"opponent_score":op_s,"my_score":me_s}
-        socketio.emit('play_status', data)
-        # update_play_status(data)
+def play_event_listener():
+    def data_emitter(message):
+        socketio.emit("test",message)
+        op = message["payload"]["data"]["onUpdateAction"]["Action"]
+        socketio.emit('play_status', {"opponent":op,"me":"waiting","opponent_score":"1","my_score":"2"})
+    socket = play_socket('c5a0a4cc-5f15-4218-8b4c-71f2768726ee', data_emitter)
+    socket.start()
 
 def play_event_updater(json):
     print('received json: ' + str(json))
@@ -68,13 +67,12 @@ def profile():
 def friend():
    return render_template('friend.html')
 
-
 @socketio.event
 def connect():
-    global thread
+    global thread 
     with thread_lock:
         if thread is None:
-            thread = socketio.start_background_task(play_event_listener)
+            thread = socketio.start_background_task(target=play_event_listener)
 
 
 if __name__ == '__main__':
