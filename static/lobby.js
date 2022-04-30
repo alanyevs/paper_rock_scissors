@@ -1,14 +1,12 @@
 function joinRoom(gameID){
     socket.emit("update_gameid", {"GameID": gameID});
     socket.emit("join_room", {"GameID": gameID, "PlayerID": UserID});
+    console.log("joining room: ", gameID);
     window.location.href="../room";
 }
 
-function getUserName(user_id) {
-    console.log(user_id);
-    var response = sdk.profileGet({"UserID": user_id});
-    var data = response.data;
-    return data.UserName;
+function GetProfile(UserID) {
+    return sdk.profileGet({"UserID": UserID});
 }
 
 socket.on("list_rooms_results", (rooms) => {
@@ -20,24 +18,32 @@ socket.on("list_rooms_results", (rooms) => {
         var playerIDs = room.PlayerIDs.split(',');
         var gameID = room.GameID;
         var len = playerIDs.length;
-        var r = $("<div class='row'>");
-        var c = $("<div class='col-1'>");
-        c.html(i.toString());
-        r.append(c);
-        c = $("<div class='col-2'>");
-        c.html(getUserName(playerIDs[0]));
-        r.append(c);
-        c = $("<div class='col-2'>");
-        c.html(len.toString() + "/" + room.Capacity);
-        r.append(c);
-        c = $("<div class='col-2'>");
-        c.html(room.Status);
-        r.append(c);
-        c = $("<div class='col-3'>");
-        r.append(c);
-        c = $('<button type="button" class="btn" onclick="joinRoom(\'' +gameID+ '\')">Join</button>');
-        r.append(c);
-        $("#lobby_container").append(r);
+        GetProfile(playerIDs[0])
+        .then((response) => {
+            console.log(response);
+            let data = response.data;
+            var r = $("<div class='row'>");
+            var c = $("<div class='col-1'>");
+            c.html(i.toString());
+            r.append(c);
+            c = $("<div class='col-2'>");
+            c.html(data.UserName);
+            r.append(c);
+            c = $("<div class='col-2'>");
+            c.html(len.toString() + "/" + room.Capacity);
+            r.append(c);
+            c = $("<div class='col-2'>");
+            c.html(room.Status);
+            r.append(c);
+            c = $("<div class='col-3'>");
+            r.append(c);
+            c = $('<button type="button" class="btn" onclick="joinRoom(\'' +gameID+ '\')">Join</button>');
+            r.append(c);
+            $("#lobby_container").append(r);
+        })
+        .catch((error) => {
+            console.log(error);
+        });   
     }
 });
 
