@@ -11,11 +11,12 @@ let temp = {
 }
 
 function GetProfile(UserID) {
-    return sdk.fetchProfileGet({"UserID": UserID});
+    return sdk.profileGet({"UserID": UserID});
 }
 
 $(document).ready(function(){
-    GetProfile("d10106c1-66b2-478c-9742-2e346be2496f")
+    console.log(UserID);
+    GetProfile(UserID)
     .then((response) => {
         console.log(response);
         let data = response.data;
