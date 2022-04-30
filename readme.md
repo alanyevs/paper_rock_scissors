@@ -6,7 +6,9 @@ Use Python 3.8
 pip install flask  
 pip install flask-socketio  
 pip install websocket-client  
-pip install simple-websocket
+pip install simple-websocket  
+pip install flask_awscognito
+pip install jwt
 
 ## usage:
 python server.py

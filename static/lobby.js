@@ -1,11 +1,7 @@
-let data=[
-    {
-        "roomid": "1002386",
-        "creator": "alanyevs",
-        "people": "1/2",
-        "game": "PSR"
-    }
-]
+function joinRoom(gameID){
+    socket.emit("join_room", {"GameID": gameID, "PlayerID": PlayerID});
+    window.location.href="../room";
+}
 
 socket.on("list_rooms_results", (rooms) => {
     console.log(rooms);
