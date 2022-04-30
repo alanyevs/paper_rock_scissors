@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
 
 {% block head %} 
-
-<script type="text/javascript" src="../static/create.js"></script>
+<script>
+    var sdk = apigClientFactory.newClient({});
+    var UserID = "{{user_id}}";
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script> let socket = io(); </script>
+<script type="text/javascript" src="../static/create.js"></script>
 <title>Create Room</title> 
 
 {% endblock %}

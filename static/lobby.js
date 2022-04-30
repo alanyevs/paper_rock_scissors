@@ -1,6 +1,14 @@
 function joinRoom(gameID){
-    socket.emit("join_room", {"GameID": gameID, "PlayerID": PlayerID});
+    socket.emit("update_gameid", {"GameID": gameID});
+    socket.emit("join_room", {"GameID": gameID, "PlayerID": UserID});
     window.location.href="../room";
+}
+
+function getUserName(user_id) {
+    console.log(user_id);
+    var response = sdk.profileGet({"UserID": user_id});
+    var data = response.data;
+    return data.UserName;
 }
 
 socket.on("list_rooms_results", (rooms) => {
@@ -12,13 +20,12 @@ socket.on("list_rooms_results", (rooms) => {
         var playerIDs = room.PlayerIDs.split(',');
         var gameID = room.GameID;
         var len = playerIDs.length;
-        // TODO: get user name according to the playerID
         var r = $("<div class='row'>");
         var c = $("<div class='col-1'>");
         c.html(i.toString());
         r.append(c);
         c = $("<div class='col-2'>");
-        c.html(playerIDs[0]);
+        c.html(getUserName(playerIDs[0]));
         r.append(c);
         c = $("<div class='col-2'>");
         c.html(len.toString() + "/" + room.Capacity);

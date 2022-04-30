@@ -13,7 +13,7 @@ API_KEY = "da2-afgsjsfxyregnltlv7frqf5wnq"
 
 # GraphQL subscription Registration object
 GQL_SUBSCRIPTION = json.dumps({
-        'query': 'subscription OnUpdateRoom { onUpdateRoom { __typename GameID PlayerID Capacity Status } }',
+        'query': 'subscription OnUpdateRoom { onUpdateRoom { __typename GameID PlayerIDs Capacity Status } }',
         'variables': {}
 })
 

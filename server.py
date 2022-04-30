@@ -69,7 +69,7 @@ def compute_game_status(status, round):
     return {"my_score":str(my_score), "op_score":str(op_score), "round":str(int(round)+1), "res":res, "op_action":x["opponent"]}
 
 
-def action_listener(op_id, my_id, game_id):
+def action_listener(op_id, my_id):
     def store_action(message):
         if message["payload"]["data"]["onUpdateAction"]["GameID"] != game_id:
             return
@@ -94,9 +94,11 @@ def action_listener(op_id, my_id, game_id):
     socket = play_listen_socket(register_id, store_action)
     socket.start()
 
-def room_listener(game_id):
+def room_listener():
     def update_room(message):
-        if message["payload"]["data"]["onUpdateAction"]["GameID"] != game_id:
+        print("************************************************************************")
+        print("new guy's comming in: ", message)
+        if message["payload"]["data"]["onUpdateRoom"]["GameID"] != game_id:
             return
         socketio.emit("refresh_room", {})
     
@@ -137,11 +139,11 @@ def lobby():
         my_id = decoded['sub']
         my_name = decoded['username']
         print(my_id)
-    return render_template('lobby.html')
+    return render_template('lobby.html', user_id = my_id)
 
 @app.route('/create')
 def create_game():
-   return render_template('create.html')
+   return render_template('create.html', user_id = my_id)
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -157,15 +159,17 @@ def friend():
 
 @app.route('/room')
 def room():
-    return render_template('room.html')
+    return render_template('room.html', user_id = my_id, game_id = game_id)
 
 ######################### helper functions of lobby #########################
 @socketio.on('create_room')
 def create(data):
-   playerID = data['PlayerID']
-   capacity = data['Capacity']
-   gameID = str(uuid.uuid4())
-   create_room(gameID, playerID, capacity)
+    global game_id
+    playerID = data['PlayerID']
+    capacity = data['Capacity']
+    gameID = str(uuid.uuid4())
+    game_id = gameID
+    create_room(gameID, playerID, capacity)
 
 @socketio.on("list_rooms")
 def list(data):
@@ -184,6 +188,12 @@ def get(data):
     room = get_room_info(gameID)
     socketio.emit("get_room_result", json.dumps(room))
 
+@socketio.on("update_gameid")
+def update_gameid(data):
+    global game_id
+    gameID = data['GameID']
+    game_id = gameID
+
 @socketio.event
 def connect():
     global op_id
@@ -193,8 +203,10 @@ def connect():
     global room_thread
     with op_thread_lock:
         if op_thread is None:
-            op_thread = socketio.start_background_task(target=action_listener, op_id=op_id, my_id = my_id, game_id = game_id)
-            room_thread = socketio.start_backgroud_task(target=room_listener, game_id = game_id)
+            op_thread = socketio.start_background_task(target=action_listener, op_id=op_id, my_id=my_id)
+            # room_thread = socketio.start_background_task(target=room_listener, game_id = game_id)
+            # op_thread = socketio.start_background_task(target=action_listener)
+            room_thread = socketio.start_background_task(target=room_listener)
 
 if __name__ == '__main__':
    socketio.run(app, host='localhost', port=8888)
