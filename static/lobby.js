@@ -4,6 +4,9 @@ var clientSecret = "hfsj7ksuf25lrnp0kst7ho9dd3vd2hscp8cvmnv5e2uv9c54rt6";
 
 var cognito_url = "https://playerx.auth.us-east-1.amazoncognito.com/oauth2/token";
 
+// TODO: replace the playerID with the one extracted from the cognito
+var PlayerID = "123";
+
 function getUser(code) {
     var request = new XMLHttpRequest();
     request.open("POST", cognito_url, true); 
@@ -22,14 +25,10 @@ function getUser(code) {
     }
 }
 
-let data=[
-    {
-        "roomid": "1002386",
-        "creator": "alanyevs",
-        "people": "1/2",
-        "game": "PSR"
-    }
-]
+function joinRoom(gameID){
+    socket.emit("join_room", {"GameID": gameID, "PlayerID": PlayerID});
+    window.location.href="../room";
+}
 
 socket.on("list_rooms_results", (rooms) => {
     console.log(rooms);
@@ -38,6 +37,7 @@ socket.on("list_rooms_results", (rooms) => {
     for (let i = 0; i < rooms.length; i++) {
         var room = rooms[i];
         var playerIDs = room.PlayerIDs.split(',');
+        var gameID = room.GameID;
         var len = playerIDs.length;
         // TODO: get user name according to the playerID
         var r = $("<div class='row'>");
@@ -52,6 +52,10 @@ socket.on("list_rooms_results", (rooms) => {
         r.append(c);
         c = $("<div class='col-2'>");
         c.html(room.Status);
+        r.append(c);
+        c = $("<div class='col-3'>");
+        r.append(c);
+        c = $('<button type="button" class="btn" onclick="joinRoom(\'' +gameID+ '\')">Join</button>');
         r.append(c);
         $("#lobby_container").append(r);
     }
@@ -70,5 +74,5 @@ $(document).ready(function(){
     // .then ((error) => {
     //     console.log(error);
     // });
-    socket.emit("list_rooms", {"PlayerID": 'c5a0a4cc-5f15-4218-8b4c-71f2768726ee', "Capacity": "2"});
+    socket.emit("list_rooms", {});
 })

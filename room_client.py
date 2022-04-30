@@ -69,6 +69,19 @@ def list_rooms():
     rooms = response['data']['listRooms']['items']
     return rooms
 
+def get_room_info(gameID):
+    ''' get the detail info of a specific room
+
+    gameID: id of the room
+
+    return: dict
+        return the detail info of the room
+    '''
+    rooms = list_rooms()
+    for room in rooms:
+        if room['GameID'] == gameID:
+            return room
+
 def join_room(gameID, playerID):
     ''' triggered when a player join the room
 
@@ -151,3 +164,5 @@ def exit_room(gameID, playerID, status = "Preparing"):
                 return True
         
         return False
+
+
