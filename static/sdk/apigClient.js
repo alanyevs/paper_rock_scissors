@@ -119,42 +119,6 @@ apigClientFactory.newClient = function (config) {
     };
     
     
-    apigClient.fetchProfileGet = function (params, body, additionalParams) {
-        if(additionalParams === undefined) { additionalParams = {}; }
-        
-        apiGateway.core.utils.assertParametersDefined(params, ['UserID'], ['body']);
-        
-        var fetchProfileGetRequest = {
-            verb: 'get'.toUpperCase(),
-            path: pathComponent + uritemplate('/fetch_profile').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['UserID']),
-            body: body
-        };
-        
-        
-        return apiGatewayClient.makeRequest(fetchProfileGetRequest, authType, additionalParams, config.apiKey);
-    };
-    
-    
-    apigClient.fetchProfileOptions = function (params, body, additionalParams) {
-        if(additionalParams === undefined) { additionalParams = {}; }
-        
-        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
-        
-        var fetchProfileOptionsRequest = {
-            verb: 'options'.toUpperCase(),
-            path: pathComponent + uritemplate('/fetch_profile').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
-            body: body
-        };
-        
-        
-        return apiGatewayClient.makeRequest(fetchProfileOptionsRequest, authType, additionalParams, config.apiKey);
-    };
-    
-    
     apigClient.leaderboardGet = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
@@ -248,18 +212,36 @@ apigClientFactory.newClient = function (config) {
     apigClient.profileGet = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, ['userId'], ['body']);
+        apiGateway.core.utils.assertParametersDefined(params, ['UserID'], ['body']);
         
         var profileGetRequest = {
             verb: 'get'.toUpperCase(),
             path: pathComponent + uritemplate('/profile').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['userId']),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['UserID']),
             body: body
         };
         
         
         return apiGatewayClient.makeRequest(profileGetRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.profileOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var profileOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/profile').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(profileOptionsRequest, authType, additionalParams, config.apiKey);
     };
     
     

@@ -7,11 +7,22 @@ import json
 from action_listener import play_listen_socket
 from action_client import play_send_socket
 from threading import Lock, Thread
+from flask_awscognito import AWSCognitoAuthentication
+import jwt
 import uuid
 
 from room_listener import room_socket
 
 app = Flask(__name__)
+
+app.config['AWS_DEFAULT_REGION'] = 'us-east-1'
+app.config['AWS_COGNITO_DOMAIN'] = 'https://playerx.auth.us-east-1.amazoncognito.com'
+app.config['AWS_COGNITO_USER_POOL_ID'] = 'us-east-1_7HmIlK58R'
+app.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = 'ie9nhbqo6337pllabr0q4nsmd'
+app.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = 'hfsj7ksuf25lrnp0kst7ho9dd3vd2hscp8cvmnv5e2uv9c54rt6'
+app.config['AWS_COGNITO_REDIRECT_URL'] = 'http://localhost:8888/lobby'
+
+aws_auth = AWSCognitoAuthentication(app)
 
 async_mode = None
 socketio = SocketIO(app ,async_mode="threading")
@@ -28,8 +39,8 @@ current_game_status = {str(k):dict() for k in range(1,10)}
 # TODO: these are global variables that should be updated promptly
 op_id = "c5a0a4cc-5f15-4218-8b4c-71f2768726ee"
 my_id = "17f2cb34-97a4-42d8-85f4-4de55c34b74f"
+my_name = None
 game_id = "1831723c-2d26-4e77-a57e-458ab5b553f6"
-
 
 send_play = play_send_socket()
 
@@ -97,11 +108,11 @@ def room_listener(game_id):
 
 @app.route('/')
 def start_page():
-   return render_template('login.html')
+   return render_template('home.html')
 
 @app.route('/login')
 def login_page():
-   return render_template('login.html')
+   return redirect(aws_auth.get_sign_in_url())
 
 @app.route('/play')
 def play():
@@ -114,11 +125,19 @@ def handle_my_action(data):
 
 @app.route('/result')
 def game_result():
-   return render_template('result.html')
+    return render_template('result.html')
 
 @app.route('/lobby')
 def lobby():
-   return render_template('lobby.html')
+    if request.args:  # User log in
+        access_token = aws_auth.get_access_token(request.args)
+        decoded = jwt.decode(access_token, options={"verify_signature": False})
+        global my_id
+        global my_name
+        my_id = decoded['sub']
+        my_name = decoded['username']
+        print(my_id)
+    return render_template('lobby.html')
 
 @app.route('/create')
 def create_game():
@@ -130,7 +149,7 @@ def leaderboard():
 
 @app.route('/profile')
 def profile():
-   return render_template('profile.html')
+   return render_template('profile.html', user_id = my_id)
 
 @app.route('/friend')
 def friend():
@@ -178,4 +197,4 @@ def connect():
             room_thread = socketio.start_backgroud_task(target=room_listener, game_id = game_id)
 
 if __name__ == '__main__':
-   socketio.run(app)
+   socketio.run(app, host='localhost', port=8888)

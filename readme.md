@@ -11,4 +11,4 @@ pip install simple-websocket
 ## usage:
 python server.py
 
-visit http://127.0.0.1:5000/ in new incognito window
+visit http://127.0.0.1:8888/ in new incognito window
