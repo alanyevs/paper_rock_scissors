@@ -188,6 +188,21 @@ def get(data):
     room = get_room_info(gameID)
     socketio.emit("get_room_result", json.dumps(room))
 
+@socketio.on("update_room")
+def update(data):
+    status = data['Status']
+    if status == "Playing":
+        start_room(game_id)
+
+@socketio.on("exit_room")
+def exit(data):
+    status = data['Status']
+    if status == 'Preparing':
+        exit_room(game_id, my_id)
+        game_id = None
+    elif status == "Deleting":
+        pass
+
 @socketio.on("update_gameid")
 def update_gameid(data):
     global game_id

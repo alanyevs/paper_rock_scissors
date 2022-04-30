@@ -32,6 +32,18 @@ socket.on("refresh_room", () => {
     window.location.href="../room";
 })
 
+function start_game() {
+    console.log("starting game");
+    socket.emit("update_room", {"Status": "Playing"});
+    window.location.href="../play";
+}
+
+function exit_game() {
+    console.log("exiting game");
+    socket.emit("exit_room", {"Status": "Preparing"});
+    window.location.href="../lobby";
+}
+
 $(document).ready(function(){
     socket.emit("get_room", {"GameID": GameID});
 })

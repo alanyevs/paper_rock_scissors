@@ -117,8 +117,30 @@ def join_room(gameID, playerID):
     
     return False
 
+def start_room(gameID):
+    ''' triggered when a game is start playing
+    '''
+    conn = connection()
+    rooms = list_rooms()
+
+    for room in rooms:
+        if room['GameID'] == gameID:
+            playerIDs = room['PlayerIDs']
+            capacity = room['Capacity']
+            status = "Playing"
+            graphql_mutation = {
+                'query': 'mutation($in:UpdateRoomInput!){updateRoom(input:$in){GameID PlayerIDs Capacity Status}}',
+                'variables': '{ "in": {"GameID":"'+ gameID +'", "PlayerIDs":"'+ playerIDs +'", "Capacity":"'+ capacity +'", "Status":"'+ status +'"} }'
+            }
+            mutation_data = json.dumps(graphql_mutation)
+            conn.request('POST', '/graphql', mutation_data, HEADERS)
+            response = conn.getresponse()
+            return True
+    
+    return False
+
 def exit_room(gameID, playerID, status = "Preparing"):
-    ''' trigger when a player exit the room or delete the room
+    ''' triggered when a player exit the room or delete the room
 
     status: str
         default value is Preparing, it would only remove the player from the room but not delete the room.
