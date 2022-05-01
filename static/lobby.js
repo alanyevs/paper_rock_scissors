@@ -18,11 +18,13 @@ socket.on("list_rooms_results", (rooms) => {
     for (let i = 0; i < rooms.length; i++) {
         var room = rooms[i];
         var playerIDs = room.PlayerIDs.split(',');
-        var gameID = room.GameID;
-        var len = playerIDs.length;
         GetProfile(playerIDs[0])
         .then((response) => {
             console.log(response);
+            var room = rooms[i];
+            var playerIDs = room.PlayerIDs.split(',');
+            var gameID = room.GameID;
+            var len = playerIDs.length;
             let data = response.data;
             var r = $("<div class='row'>");
             var c = $("<div class='col-1'>");

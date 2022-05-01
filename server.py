@@ -36,14 +36,12 @@ my_thread_lock = Lock()
 status_lock = Lock()
 current_game_status = {str(k):dict() for k in range(1,10)}
 
-# TODO: these are global variables that should be updated promptly
-op_id = "c5a0a4cc-5f15-4218-8b4c-71f2768726ee"
-my_id = "17f2cb34-97a4-42d8-85f4-4de55c34b74f"
+op_ids = None
+my_id = None
 my_name = None
-game_id = "1831723c-2d26-4e77-a57e-458ab5b553f6"
+game_id = None
 
 send_play = play_send_socket()
-
 
 def compute_game_status(status, round):
     psr_rule = {'paper':'scissors','scissors':'rock','rock':'paper'}
@@ -69,14 +67,19 @@ def compute_game_status(status, round):
     return {"my_score":str(my_score), "op_score":str(op_score), "round":str(int(round)+1), "res":res, "op_action":x["opponent"]}
 
 
-def action_listener(op_id, my_id):
+def action_listener():
     def store_action(message):
+        print("************************************************************************")
+        print("new actions is", message)
         if message["payload"]["data"]["onUpdateAction"]["GameID"] != game_id:
             return
         global current_game_status
         action = message["payload"]["data"]["onUpdateAction"]["Action"]
         round = message["payload"]["data"]["onUpdateAction"]["Round"]
-        if message["payload"]["data"]["onUpdateAction"]["PlayerID"] == op_id:
+        pid = message["payload"]["data"]["onUpdateAction"]["PlayerID"]
+        print(f"my id is {my_id}, op_id is {op_ids} and the player id is {pid}")
+        if message["payload"]["data"]["onUpdateAction"]["PlayerID"] in op_ids:
+            # TODO: we might need to support multiple players in the near future
             player = "opponent" 
         elif message["payload"]["data"]["onUpdateAction"]["PlayerID"] == my_id:
             player = "me"
@@ -96,11 +99,18 @@ def action_listener(op_id, my_id):
 
 def room_listener():
     def update_room(message):
-        print("************************************************************************")
-        print("new guy's comming in: ", message)
+        global op_ids
         if message["payload"]["data"]["onUpdateRoom"]["GameID"] != game_id:
             return
-        socketio.emit("refresh_room", {})
+        if message["payload"]["data"]["onUpdateRoom"]["Status"] == "Preparing":
+            socketio.emit("refresh_room", {})
+        elif message["payload"]["data"]["onUpdateRoom"]["Status"] == "Playing":
+            playerIDs = message["payload"]["data"]["onUpdateRoom"]['PlayerIDs']
+            playerIDs = playerIDs.split(',')
+            playerIDs.remove(my_id)
+            op_ids = playerIDs
+            send_play.start(my_id, game_id)
+            socketio.emit("start_game_success", '')
     
     register_id = str(uuid.uuid4())
     socket = room_socket(register_id, update_room)
@@ -138,7 +148,6 @@ def lobby():
         global my_name
         my_id = decoded['sub']
         my_name = decoded['username']
-        print(my_id)
     return render_template('lobby.html', user_id = my_id)
 
 @app.route('/create')
@@ -181,8 +190,6 @@ def list(data):
 def join(data):
     playerID = data['PlayerID']
     gameID = data['GameID']
-    print("************************************************************************")
-    print(f"{playerID} is trying to join {gameID}")
     join_room(gameID, playerID)
     socketio.emit("join_room_success", '')
 
@@ -198,7 +205,6 @@ def update(data):
     status = data['Status']
     if status == "Playing":
         start_room(game_id)
-        socketio.emit("start_game_success", '')
 
 @socketio.on("exit_room")
 def exit(data):
@@ -220,14 +226,11 @@ def update_gameid(data):
 
 @socketio.event
 def connect():
-    global op_id
-    global my_id
-
     global op_thread
     global room_thread
     with op_thread_lock:
         if op_thread is None:
-            op_thread = socketio.start_background_task(target=action_listener, op_id=op_id, my_id=my_id)
+            op_thread = socketio.start_background_task(target=action_listener)
             # room_thread = socketio.start_background_task(target=room_listener, game_id = game_id)
             # op_thread = socketio.start_background_task(target=action_listener)
             room_thread = socketio.start_background_task(target=room_listener)

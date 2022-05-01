@@ -5,7 +5,14 @@ function GetProfile(UserID) {
 socket.on("get_room_result", (room) => {
     console.log(room);
     var room = JSON.parse(room);
-    var playerIDs = room.PlayerIDs.split(',');
+    var playerIDs = room.PlayerIDs;
+    console.log(playerIDs, PlayerIDs);
+    if (playerIDs == PlayerIDs) {
+        return;
+    } else {
+        PlayerIDs = playerIDs;
+    }
+    playerIDs = playerIDs.split(',');
     for (let i = 0; i < playerIDs.length; i++) {
         GetProfile(playerIDs[i])
         .then((response) => {
@@ -29,15 +36,18 @@ socket.on("get_room_result", (room) => {
 
 socket.on("refresh_room", () => {
     console.log("refreshing room");
-    window.location.href="../room";
+    // window.location.href="../room";
+    window.location.reload();
+    // socket.emit("get_room", {"GameID": GameID});
 })
 
 function start_game() {
     console.log("starting game");
-    socket.emit("update_room", {"Status": "Playing"});
+    socket.emit("update_room", {"Status": "Playing", "PlayerIDs": PlayerIDs});
 }
 
 socket.on("start_game_success", () => {
+    PlayerIDs = null;
     window.location.href="../play";
 })
 
@@ -47,6 +57,7 @@ function exit_game() {
 }
 
 socket.on("exit_room_success", () => {
+    PlayerIDs = null;
     window.location.href="../lobby";
 })
 

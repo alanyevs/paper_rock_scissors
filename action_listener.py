@@ -60,9 +60,6 @@ def on_message_id(id, emit_func):
         global timeout_timer
         global timeout_interval
 
-        print('### message ###')
-        print('<< ' + message)
-
         message_object = json.loads(message)
         message_type   = message_object['type']
 
@@ -90,15 +87,7 @@ def on_message_id(id, emit_func):
             ws.send(start_sub)
 
         elif(message_type == 'data'):
-            # deregister = {
-            #     'type': 'stop',
-            #     'id': id
-            # }
             emit_func(message_object)
-            print(message_object)
-            # end_sub = json.dumps(deregister)
-            # # print('>> ' + end_sub )
-            # ws.send(end_sub)
 
         elif(message_object['type'] == 'error'):
             print ('Error from AppSync: ' + message_object['payload'])
@@ -131,9 +120,6 @@ connection_url = WSS_URL + '?header=' + header_encode(api_header) + '&payload=e3
 # Create the websocket connection to AppSync's real-time endpoint
 #  also defines callback functions for websocket events
 #  NOTE: The connection requires a subprotocol 'graphql-ws'
-print( 'Connecting to: ' + connection_url )
-
-
 
 class play_listen_socket():
     def __init__(self, id, f):

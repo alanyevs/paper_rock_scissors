@@ -27,10 +27,22 @@ class play_send_socket():
         self.conn = http.client.HTTPSConnection(HOST, 443)
         
     def send(self, playerid, gameid, round, action):
-
-
         graphql_mutation = {
             'query': 'mutation($in:UpdateActionInput!){updateAction(input:$in){PlayerID GameID Round Action}}',
+            'variables': '{ "in": {"PlayerID":"'+ playerid +'", "GameID":"'+ gameid +'", "Round":"'+ round +'", "Action":"'+ action +'"} }'
+        }
+        mutation_data = json.dumps(graphql_mutation)
+        # Now Perform the Mutation
+        self.conn.request('POST', '/graphql', mutation_data, headers)
+        response = self.conn.getresponse()
+
+        response_string = response.read().decode('utf-8')
+
+    def start(self, playerid, gameid):
+        round = "0"
+        action = "null"
+        graphql_mutation = {
+            'query': 'mutation($in:CreateActionInput!){createAction(input:$in){PlayerID GameID Round Action}}',
             'variables': '{ "in": {"PlayerID":"'+ playerid +'", "GameID":"'+ gameid +'", "Round":"'+ round +'", "Action":"'+ action +'"} }'
         }
         mutation_data = json.dumps(graphql_mutation)
@@ -40,7 +52,6 @@ class play_send_socket():
         response = self.conn.getresponse()
 
         response_string = response.read().decode('utf-8')
-        print(response_string)
 
 if __name__ == "__main__":
     x = play_send_socket()

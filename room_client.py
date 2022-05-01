@@ -46,8 +46,6 @@ def create_room(gameID, playerID, capacity = "2"):
     response = conn.getresponse()
 
     response_string = response.read().decode('utf-8')
-    print("********************************************************************")
-    print(response_string)
 
 def list_rooms():
     ''' list all the rooms that are either still preparing or playing
