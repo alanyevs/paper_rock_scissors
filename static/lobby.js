@@ -1,9 +1,11 @@
 function joinRoom(gameID){
     socket.emit("update_gameid", {"GameID": gameID});
     socket.emit("join_room", {"GameID": gameID, "PlayerID": UserID});
-    console.log("joining room: ", gameID);
-    window.location.href="../room";
 }
+
+socket.on("join_room_success", () => {
+    window.location.href="../room";
+})
 
 function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});

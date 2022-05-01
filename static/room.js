@@ -35,14 +35,20 @@ socket.on("refresh_room", () => {
 function start_game() {
     console.log("starting game");
     socket.emit("update_room", {"Status": "Playing"});
-    window.location.href="../play";
 }
+
+socket.on("start_game_success", () => {
+    window.location.href="../play";
+})
 
 function exit_game() {
     console.log("exiting game");
     socket.emit("exit_room", {"Status": "Preparing"});
-    window.location.href="../lobby";
 }
+
+socket.on("exit_room_success", () => {
+    window.location.href="../lobby";
+})
 
 $(document).ready(function(){
     socket.emit("get_room", {"GameID": GameID});

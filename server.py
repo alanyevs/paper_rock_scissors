@@ -170,6 +170,7 @@ def create(data):
     gameID = str(uuid.uuid4())
     game_id = gameID
     create_room(gameID, playerID, capacity)
+    socketio.emit("room_created", "")
 
 @socketio.on("list_rooms")
 def list(data):
@@ -180,7 +181,10 @@ def list(data):
 def join(data):
     playerID = data['PlayerID']
     gameID = data['GameID']
+    print("************************************************************************")
+    print(f"{playerID} is trying to join {gameID}")
     join_room(gameID, playerID)
+    socketio.emit("join_room_success", '')
 
 @socketio.on("get_room")
 def get(data):
@@ -190,16 +194,21 @@ def get(data):
 
 @socketio.on("update_room")
 def update(data):
+    global game_id
     status = data['Status']
     if status == "Playing":
         start_room(game_id)
+        socketio.emit("start_game_success", '')
 
 @socketio.on("exit_room")
 def exit(data):
+    global game_id
+    global my_id
     status = data['Status']
     if status == 'Preparing':
         exit_room(game_id, my_id)
         game_id = None
+        socketio.emit("exit_room_success", '')
     elif status == "Deleting":
         pass
 

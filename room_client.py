@@ -173,6 +173,8 @@ def exit_room(gameID, playerID, status = "Preparing"):
                 playerIDs = room['PlayerIDs']
                 playerIDs = playerIDs.split(',')
                 playerIDs.remove(playerID)
+                if len(playerIDs) == 0:
+                    return exit_room(gameID, "", "Deleting")
                 playerIDs = ','.join(playerIDs)
                 capacity = room['Capacity']
                 status = room['Status']
