@@ -50,10 +50,17 @@
 {% block body %}
 
 <div class="container">
-    <div class="row text-center mt-3" style="font-size: 50pt; font-weight: bold;">
-        <span>
-            ROUND <span id="round_number">1</span>
-        </span>
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <div class="row text-center ">
+                <span style="font-size: 50pt; font-weight: bold;">
+                    ROUND <span id="round_number">1</span>
+                </span>
+            </div>
+        </div>
+        <div class="col-2">
+            <button type="button" class="btn btn-primary mt-4" onclick="" style="height:50px">Exit Game</button>
+        </div>
     </div>
     <div class="row mt-3" style="height: 200px;">
         <div class="offset-1 col-6 border border-2 border-dark rounded-9 shadow" id="opponent_action_container">

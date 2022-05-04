@@ -48,7 +48,8 @@ function start_game() {
 
 socket.on("start_game_success", () => {
     PlayerIDs = null;
-    window.location.href="../play";
+    console.log("starting game sucess");
+    window.location.href="/play";
 })
 
 function exit_game() {
@@ -58,7 +59,7 @@ function exit_game() {
 
 socket.on("exit_room_success", () => {
     PlayerIDs = null;
-    window.location.href="../lobby";
+    window.location.href="/lobby";
 })
 
 $(document).ready(function(){
