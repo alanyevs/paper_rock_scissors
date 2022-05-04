@@ -19,9 +19,9 @@ function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
-function SubmitChange(id, ava){
+function SubmitChange(NewUserName, ava){
     // TODO: submit the id to aws db
-    console.log(id)
+    console.log(NewUserName)
 }
 
 function EditProfile(){
@@ -39,9 +39,7 @@ function ConfirmProfile(){
 
 $(document).ready(function(){
     $("#edit_btn").click(EditProfile)
-
-
-
+    
     console.log(UserID);
     GetProfile(UserID)
     .then((response) => {
