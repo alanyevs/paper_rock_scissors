@@ -2,36 +2,50 @@ function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
-socket.on("get_room_result", (room) => {
-    console.log(room);
-    var room = JSON.parse(room);
-    var playerIDs = room.PlayerIDs;
-    console.log(playerIDs, PlayerIDs);
-    if (playerIDs == PlayerIDs) {
-        return;
-    } else {
-        PlayerIDs = playerIDs;
-    }
+socket.on("get_room_result", (room_info) => {
+    console.log(room_info);
+    let room = JSON.parse(room_info);
+    let playerIDs = room.PlayerIDs;
+    console.log(playerIDs);
+    // if (playerIDs == PlayerIDs) {
+    //     return;
+    // } else {
+    //     PlayerIDs = playerIDs;
+    // }
     playerIDs = playerIDs.split(',');
-    for (let i = 0; i < playerIDs.length; i++) {
-        GetProfile(playerIDs[i])
-        .then((response) => {
+
+    $.each(playerIDs, function(i,data){
+        GetProfile(this).then((response) => {
             console.log(response);
             let data = response.data;
-            var r = $("<div class='row'>");
-            var c = $("<div class='col-1'>");
-            c.html(data.UserName);
-            r.append(c);
-            c = $("<div class='col-2'>");
-            // TODO: replace the winrate with the one extracted from the user profile
-            c.html("100");
-            r.append(c);
-            $("#room_container").append(r);
+            $(".room_player_avatar").eq(i).attr("src", GetAvatarPath(data.AvatarIndex));
+            $(".room_player_name").eq(i).html(data.UserName);
         })
         .catch((error) => {
             console.log(error);
         });
-    }
+    })
+
+
+    // for (let i = 0; i < playerIDs.length; i++) {
+    //     GetProfile(playerIDs[i])
+    //     .then((response) => {
+    //         console.log(response);
+    //         let data = response.data;
+    //         var r = $("<div class='row'>");
+    //         var c = $("<div class='col-1'>");
+    //         c.html(data.UserName);
+    //         r.append(c);
+    //         c = $("<div class='col-2'>");
+    //         // TODO: replace the winrate with the one extracted from the user profile
+    //         c.html("100");
+    //         r.append(c);
+    //         $("#room_container").append(r);
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
+    // }
 });
 
 socket.on("refresh_room", () => {
