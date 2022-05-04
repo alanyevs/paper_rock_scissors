@@ -1,6 +1,15 @@
 {% extends "layout.html" %}
 
-{% block head %} <title>Friend</title> {% endblock %}
+{% block head %} 
+
+<script>
+    let UserID = "{{user_id}}";
+    let sdk = apigClientFactory.newClient({});
+</script>
+
+<title>Friend</title> 
+
+{% endblock %}
 
 {% block body %}
     <div class="container">
