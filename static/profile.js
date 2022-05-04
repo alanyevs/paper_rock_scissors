@@ -1,5 +1,6 @@
 let temp = {
-    "avatar": "https://m.media-amazon.com/images/I/816p9XkbMQL._SL1427_.jpg",
+    //"avatar": "https://m.media-amazon.com/images/I/816p9XkbMQL._SL1427_.jpg",
+    "avatar": "static/sucai/avatars/IMG_3.jpg",
     "user_id": "alanyevs",
     "winning_rate": "20%",
     "games": "200",
@@ -8,6 +9,10 @@ let temp = {
     "scissors_rate": "30%",
     "rock_rate": "40%",
     "recent_games": []
+}
+
+function GetAvatarPath(AvatarIndex) {
+    return "static/sucai/avatars/IMG_"+ AvatarIndex +".jpg";
 }
 
 function GetProfile(UserID) {
@@ -21,7 +26,7 @@ $(document).ready(function(){
         console.log(response);
         let data = response.data;
         $("#user_id").html(data.UserName)
-        $("#user_avatar").attr("src", temp.avatar) // TODO: 头像
+        $("#user_avatar").attr("src", GetAvatarPath(data.AvatarIndex)) // TODO: 头像
         $("#win_count").html(data.WinCount)
         $("#game_count").html(data.GameCount)
         $("#level").html(temp.level)  // ???? TODO: 等级

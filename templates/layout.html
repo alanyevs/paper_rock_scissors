@@ -20,7 +20,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
-    <script type="text/javascript" src="../static/all.js"></script>
     <script type="text/javascript" src="../static/sdk/lib/axios/dist/axios.standalone.js"></script>
     <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
     <script type="text/javascript" src="../static/sdk/lib/CryptoJS/rollups/sha256.js"></script>
@@ -36,7 +35,10 @@
     <script>
         let sucai_path = "{{url_for('static', filename='sucai')}}"
         console.log(sucai_path)
+        //let sdk = apigClientFactory.newClient({});
+        //let UserID = "{{user_id}}";
     </script>
+    <script type="text/javascript" src="../static/all.js"></script>
     {% block head %} <title>base</title> {% endblock %}
 </head>
 

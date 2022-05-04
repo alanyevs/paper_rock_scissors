@@ -156,7 +156,7 @@ def create_game():
 
 @app.route('/leaderboard')
 def leaderboard():
-   return render_template('leaderboard.html')
+   return render_template('leaderboard.html', user_id = my_id)
 
 @app.route('/profile')
 def profile():
@@ -164,7 +164,7 @@ def profile():
 
 @app.route('/friend')
 def friend():
-   return render_template('friend.html')
+   return render_template('friend.html', user_id = my_id)
 
 @app.route('/room')
 def room():

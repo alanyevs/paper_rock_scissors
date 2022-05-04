@@ -3,7 +3,8 @@
 {% block head %} 
 
 <script>
-    var sdk = apigClientFactory.newClient({});
+    let UserID = "{{user_id}}";
+    let sdk = apigClientFactory.newClient({});
 </script>
 
 <script type="text/javascript" src="../static/leaderboard.js"></script>
