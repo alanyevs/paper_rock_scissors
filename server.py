@@ -120,15 +120,21 @@ def room_listener():
 
 @app.route('/')
 def start_page():
-   return render_template('home.html')
+    if my_id:
+        return render_template('home.html', user_id = my_id)
+    else:
+        return render_template('login.html')
 
 @app.route('/login')
 def login_page():
-   return redirect(aws_auth.get_sign_in_url())
+    return redirect(aws_auth.get_sign_in_url())
 
 @app.route('/play')
 def play():
-   return render_template('play.html')
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('play.html')
 
 @socketio.on('my_action')
 def handle_my_action(data):
@@ -137,7 +143,10 @@ def handle_my_action(data):
 
 @app.route('/result')
 def game_result():
-    return render_template('result.html')
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('result.html')
 
 @app.route('/lobby')
 def lobby():
@@ -148,27 +157,45 @@ def lobby():
         global my_name
         my_id = decoded['sub']
         my_name = decoded['username']
-    return render_template('lobby.html', user_id = my_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('lobby.html', user_id = my_id)
 
 @app.route('/create')
 def create_game():
-   return render_template('create.html', user_id = my_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('create.html', user_id = my_id)
 
 @app.route('/leaderboard')
 def leaderboard():
-   return render_template('leaderboard.html', user_id = my_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('leaderboard.html', user_id = my_id)
 
 @app.route('/profile')
 def profile():
-   return render_template('profile.html', user_id = my_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('profile.html', user_id = my_id)
 
 @app.route('/friend')
 def friend():
-   return render_template('friend.html', user_id = my_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('friend.html', user_id = my_id)
 
 @app.route('/room')
 def room():
-    return render_template('room.html', user_id = my_id, game_id = game_id)
+    if not my_id:
+        return render_template('login.html')
+    else:
+        return render_template('room.html', user_id = my_id, game_id = game_id)
 
 ######################### helper functions of lobby #########################
 @socketio.on('create_room')

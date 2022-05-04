@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block head %} <title>Login</title> {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <div class="row" style="height:100px"> </div>
+                <div class="row">
+                    <div class="col-9 offset-1">
+                        <img src="../static/sucai/home.png" alt="home" width="100%">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row" style="height:160px"> </div>
+                <div class="row" style="height:100px">
+                    <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="100%"
+                    alt="MDB Logo" id="logo"/>
+                </div>
+                <div class="row" style="height:150px"> </div>
+                <div class="row">
+                    <div class="col-8 offset-2">
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='/login'" style="width: 100% !important; height:50px">
+                        Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

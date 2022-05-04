@@ -15,10 +15,7 @@
 
 {% block body %}
 
-<div class="container">
-    <h1 class="row display-5 d-flex justify-content-center mt-5">
-        Room
-    </h1>
+{# <div class="container">
     <div class="row mt-5">
         <div class="col-2 offset-6">
             <button type="button" class="btn btn-outline-dark" onclick="start_game()">Start</button>
@@ -35,6 +32,80 @@
 
 
     <div class="container content shadow mt-1" id="room_container">
+    </div>
+
+</div> #}
+
+<div class="container">
+    <h1 class="row display-2 d-flex justify-content-center mt-5">
+        Room
+    </h1>
+
+    <h1 class="row d-flex justify-content-center mt-3">
+        Game: Paper Scissors Rock
+    </h1>
+
+    <div class="row rounded mt-4" style="border-style: dotted !important; border-color: lightgrey;">
+        <div class="col-3">
+            <div class="row" style="height:25px"></div>
+            <div class="row d-flex justify-content-center" style="height: 140px;">
+                <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                    <img src="../static/sucai/user0.png" alt="" 
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                </div>
+            </div>
+            <div class="row text-center" style="height: 60px;">
+                <span style="font-size: 20pt;">Open</span>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row" style="height:25px"></div>
+            <div class="row d-flex justify-content-center" style="height: 140px;">
+                <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                    <img src="../static/sucai/user0.png" alt="" 
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                </div>
+            </div>
+            <div class="row text-center" style="height: 60px;">
+                <span style="font-size: 20pt;">Open</span>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row" style="height:25px"></div>
+            <div class="row d-flex justify-content-center" style="height: 140px;">
+                <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                    <img src="../static/sucai/stop.png" alt="" 
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                </div>
+            </div>
+            <div class="row text-center" style="height: 60px;">
+                <span style="font-size: 20pt;">Closed</span>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row" style="height:25px"></div>
+            <div class="row d-flex justify-content-center" style="height: 140px;">
+                <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
+                    <img src="../static/sucai/stop.png" alt="" 
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                </div>
+            </div>
+            <div class="row text-center" style="height: 60px;">
+                <span style="font-size: 20pt;">Closed</span>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 justify-content-end">
+        <div class="col-2">
+            <div class="row">
+                <button type="button" class="btn btn-outline-primary" onclick="start_game()" style="height:50px">Start</button>
+            </div>
+        </div>
+        <div class="mx-3 col-2">
+            <div class="row">
+                <button type="button" class="btn btn-outline-dark" onclick="exit_game()" style="height:50px">Exit</button>
+            </div>
+        </div>
     </div>
 
 </div>
