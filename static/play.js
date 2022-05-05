@@ -6,7 +6,7 @@ function option_click(){
 }
 
 function EndGame() {
-    pass
+    
 }
 
 
@@ -15,6 +15,9 @@ $(document).ready(function(){
         console.log(data)
     })
 
+    $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
+    $("#opponent_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
+
     socket.on('play_status', function(status) {
         console.log(status)
         
@@ -22,19 +25,19 @@ $(document).ready(function(){
         $("#opponent_option").attr("src",sucai_path+"/"+status.op_action+".svg")
 
         if (status.res == "win") {
-            $("#my_action_container").addClass("svg-shadow shadow-success shadow-intensity-lg")
-            $("#opponent_action_container").addClass("svg-shadow shadow-danger shadow-intensity-lg")
+            $("#my_action_container").css("box-shadow","0 .5rem 1.5rem rgba(44,204,27,0.7)")
+            $("#opponent_action_container").css("box-shadow","0 .5rem 1.5rem rgba(227,40,11,0.7)")
         } else if (status.res == "lose") {
-            $("#opponent_action_container").addClass("svg-shadow shadow-success shadow-intensity-lg")
-            $("#my_action_container").addClass("svg-shadow shadow-danger shadow-intensity-lg")
+            $("#opponent_action_container").css("box-shadow","0 .5rem 1.5rem rgba(44,204,27,0.7)")
+            $("#my_action_container").css("box-shadow","0 .5rem 1.5rem rgba(227,40,11,0.7)")
         } else if (status.res == "draw") {
-            $("#opponent_action_container").addClass("svg-shadow shadow-warning shadow-intensity-lg")
-            $("#my_action_container").addClass("svg-shadow shadow-warning shadow-intensity-lg")
+            $("#opponent_action_container").css("box-shadow","0 .5rem 1.5rem rgba(245,145,5,0.7)")
+            $("#my_action_container").css("box-shadow","0 .5rem 1.5rem rgba(245,145,5,0.7)")
         }
 
         setTimeout(function(){
-            $("#my_action_container").attr("class","mx-5 col-6 border border-2 border-dark rounded-9 shadow")
-            $("#opponent_action_container").attr("class","offset-1 col-6 border border-2 border-dark rounded-9 shadow")
+            $("#opponent_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
+            $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
 
             if (parseInt(status.my_score) > 3) {
                 EndGame()

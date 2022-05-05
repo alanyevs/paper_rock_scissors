@@ -2,10 +2,12 @@ function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
+let playerIDs = null
+
 socket.on("get_room_result", (room_info) => {
     console.log(room_info);
     let room = JSON.parse(room_info);
-    let playerIDs = room.PlayerIDs;
+    playerIDs = room.PlayerIDs;
     console.log(playerIDs);
     playerIDs = playerIDs.split(',');
 
@@ -37,11 +39,11 @@ socket.on("refresh_room", () => {
 
 function start_game() {
     console.log("starting game");
-    socket.emit("update_room", {"Status": "Playing", "PlayerIDs": PlayerIDs});
+    socket.emit("update_room", {"Status": "Playing", "PlayerIDs": playerIDs});
 }
 
 socket.on("start_game_success", () => {
-    PlayerIDs = null;
+    playerIDs = null
     console.log("starting game sucess");
     window.location.href="/play";
 })
@@ -52,7 +54,7 @@ function exit_game() {
 }
 
 socket.on("exit_room_success", () => {
-    PlayerIDs = null;
+    playerIDs = null
     window.location.href="/lobby";
 })
 
