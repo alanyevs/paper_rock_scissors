@@ -21,6 +21,9 @@ socket.on("get_room_result", (room_info) => {
         });
     })
 
+    console.log(playerIDs)
+    console.log(UserID)
+
     if (playerIDs.length == 2 && playerIDs[0] == UserID) {
         $("#room_start_btn").disabled = false
     } else {
