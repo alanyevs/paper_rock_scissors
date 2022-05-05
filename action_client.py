@@ -52,6 +52,23 @@ class play_send_socket():
         response = self.conn.getresponse()
 
         response_string = response.read().decode('utf-8')
+    
+    def delete(self, playerid):
+        graphql_mutation = {
+            'query': 'mutation($in:DeleteActionInput!){deleteAction(input:$in){PlayerID}}',
+            'variables': '{ "in": {"PlayerID":"'+ playerid +'"} }'
+        }
+        mutation_data = json.dumps(graphql_mutation)
+
+        # Now Perform the Mutation
+        self.conn.request('POST', '/graphql', mutation_data, headers)
+        try:
+            self.conn.getresponse()
+        except:
+            return False
+        
+        return True
+
 
 if __name__ == "__main__":
     x = play_send_socket()

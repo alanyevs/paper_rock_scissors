@@ -5,6 +5,17 @@ function option_click(){
     socket.emit("my_action",{"action": $(this).attr("op"), "round":round})
 }
 
+socket.on("end_game_success", function(records) {
+    records = JSON.parse(records);
+    // $.each(records, function(i, record){
+        
+    // })
+})
+
+function exit_game() {
+    // socket.emit("exit_room", {"Status": "Deleting"});
+}
+
 $(document).ready(function(){
     socket.on('test', function(data) {
         console.log(data)

@@ -7,6 +7,10 @@ socket.on("join_room_success", () => {
     window.location.href="../room";
 })
 
+socket.on("join_room_failed", () => {
+    alert("The number of people in the room has reached the capacity and you can't join the game.");
+})
+
 function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }

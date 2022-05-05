@@ -69,8 +69,6 @@ def compute_game_status(status, round):
 
 def action_listener():
     def store_action(message):
-        print("************************************************************************")
-        print("new actions is", message)
         if message["payload"]["data"]["onUpdateAction"]["GameID"] != game_id:
             return
         global current_game_status
@@ -100,6 +98,7 @@ def action_listener():
 def room_listener():
     def update_room(message):
         global op_ids
+        global current_game_status
         if message["payload"]["data"]["onUpdateRoom"]["GameID"] != game_id:
             return
         if message["payload"]["data"]["onUpdateRoom"]["Status"] == "Preparing":
@@ -111,7 +110,13 @@ def room_listener():
             op_ids = playerIDs
             send_play.start(my_id, game_id)
             socketio.emit("start_game_success", '')
-    
+        elif message["payload"]["data"]["onUpdateRoom"]["Status"] == "Deleting":
+            op_ids = None
+            game_id = None
+            send_play.delete(my_id)
+            socketio.emit("end_game_success", json.dumps(current_game_status))
+            current_game_status = {str(k):dict() for k in range(1,10)}
+
     register_id = str(uuid.uuid4())
     socket = room_socket(register_id, update_room)
     socket.start()
@@ -217,8 +222,10 @@ def list(data):
 def join(data):
     playerID = data['PlayerID']
     gameID = data['GameID']
-    join_room(gameID, playerID)
-    socketio.emit("join_room_success", '')
+    if join_room(gameID, playerID):
+        socketio.emit("join_room_success", '')
+    else:
+        socketio.emit("join_room_failed", '')
 
 @socketio.on("get_room")
 def get(data):
@@ -243,7 +250,7 @@ def exit(data):
         game_id = None
         socketio.emit("exit_room_success", '')
     elif status == "Deleting":
-        pass
+        exit_room(game_id, my_id, "Deleting")
 
 @socketio.on("update_gameid")
 def update_gameid(data):
