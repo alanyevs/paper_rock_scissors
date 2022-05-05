@@ -134,19 +134,19 @@ def play():
     if not my_id:
         return render_template('login.html')
     else:
-        return render_template('play.html')
+        return render_template('play.html', user_id = my_id)
 
 @socketio.on('my_action')
 def handle_my_action(data):
     # print("")
     send_play.send(my_id, game_id, data["round"], data["action"])
 
-@app.route('/result')
-def game_result():
+@app.route('/result/<res>')
+def game_result(res=None):
     if not my_id:
         return render_template('login.html')
     else:
-        return render_template('result.html')
+        return render_template('result.html', res=res.upper(), user_id = my_id)
 
 @app.route('/lobby')
 def lobby():

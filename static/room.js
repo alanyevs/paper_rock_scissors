@@ -7,11 +7,6 @@ socket.on("get_room_result", (room_info) => {
     let room = JSON.parse(room_info);
     let playerIDs = room.PlayerIDs;
     console.log(playerIDs);
-    // if (playerIDs == PlayerIDs) {
-    //     return;
-    // } else {
-    //     PlayerIDs = playerIDs;
-    // }
     playerIDs = playerIDs.split(',');
 
     $.each(playerIDs, function(i,data){
@@ -26,26 +21,11 @@ socket.on("get_room_result", (room_info) => {
         });
     })
 
-
-    // for (let i = 0; i < playerIDs.length; i++) {
-    //     GetProfile(playerIDs[i])
-    //     .then((response) => {
-    //         console.log(response);
-    //         let data = response.data;
-    //         var r = $("<div class='row'>");
-    //         var c = $("<div class='col-1'>");
-    //         c.html(data.UserName);
-    //         r.append(c);
-    //         c = $("<div class='col-2'>");
-    //         // TODO: replace the winrate with the one extracted from the user profile
-    //         c.html("100");
-    //         r.append(c);
-    //         $("#room_container").append(r);
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     });
-    // }
+    if (playerIDs.length == 2 && playerIDs[0] == UserID) {
+        $("#room_start_btn").disabled = false
+    } else {
+        $("#room_start_btn").disabled = true
+    }
 });
 
 socket.on("refresh_room", () => {

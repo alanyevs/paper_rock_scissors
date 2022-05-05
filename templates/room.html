@@ -15,27 +15,6 @@
 
 {% block body %}
 
-{# <div class="container">
-    <div class="row mt-5">
-        <div class="col-2 offset-6">
-            <button type="button" class="btn btn-outline-dark" onclick="start_game()">Start</button>
-            <button type="button" class="btn btn-outline-dark" onclick="exit_game()">Exit</button>
-        </div>
-
-    </div>
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col-1"> UserName </div>
-            <div class="col-2"> WinRate </div>
-        </div>
-    </div>
-
-
-    <div class="container content shadow mt-1" id="room_container">
-    </div>
-
-</div> #}
-
 <div class="container">
     <h1 class="row display-2 d-flex justify-content-center mt-5">
         Room
@@ -102,7 +81,7 @@
     <div class="row mt-5 justify-content-end">
         <div class="col-2">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary" onclick="start_game()" style="height:50px">Start</button>
+                <button type="button" class="btn btn-outline-primary" onclick="start_game()" style="height:50px" id="room_start_btn" disabled>Start</button>
             </div>
         </div>
         <div class="mx-3 col-2">
