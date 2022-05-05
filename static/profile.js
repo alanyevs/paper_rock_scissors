@@ -19,7 +19,27 @@ function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
+function SubmitChange(NewUserName, ava){
+    // TODO: submit the id to aws db
+    console.log(NewUserName)
+}
+
+function EditProfile(){
+    $(this).html("Confirm")
+    $("#user_id").attr("contentEditable", true)
+    $(this).click(ConfirmProfile)
+}
+
+function ConfirmProfile(){
+    $(this).html("Edit")
+    $("#user_id").attr("contentEditable", false)
+    SubmitChange($("#user_id").html(),0)
+    $(this).click(EditProfile)
+}
+
 $(document).ready(function(){
+    $("#edit_btn").click(EditProfile)
+    
     console.log(UserID);
     GetProfile(UserID)
     .then((response) => {
@@ -53,4 +73,5 @@ $(document).ready(function(){
         r.append(c)
         $("#recent_container").append(r)
     })
+
 })

@@ -1,21 +1,20 @@
 {% extends "layout.html" %}
 
 {% block head %} 
-    <script type="text/javascript" src="../static/result.js"></script>
     <title>Result</title>
 {% endblock %}
 
 {% block body %} 
 
 <div class="container">
-    <div class="row text-center mt-3" style="font-size: 50pt; font-weight: bold;">
-        <span>
-            YOU <span id="winlose"></span>
-        </span>
-    </div>
+    <h1 class="row display-2 d-flex justify-content-center mt-5">
+        {# <span> #}
+            YOU {{res}} 
+        {# </span> #}
+    </h1>
+        
     <div class="d-flex justify-content-around mt-5">
-        <button type="button" class="btn btn-primary">Play Again</button>
-        <button type="button" class="btn btn-primary">Share</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='/lobby'">Play Again</button>
     </div>
 </div>
 
