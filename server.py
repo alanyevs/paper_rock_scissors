@@ -57,8 +57,9 @@ def compute_game_status(status, round):
 
     res = ''
     x = status[round]
-    if x["opponent"] != x["me"]:
+    if x["opponent"] == x["me"]:
         res = "draw"
+    else:
         if psr_rule[x["opponent"]] == x["me"]:
             res="win"
         else:
