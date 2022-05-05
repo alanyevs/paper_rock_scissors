@@ -64,7 +64,7 @@ $(document).ready(function(){
         },1500); 
 
     });
-
-    $(".option").click(option_click)
-
+    setTimeout(function(){
+        $(".option").click(option_click)
+    },400); 
 })
