@@ -10,7 +10,6 @@ socket.on("get_room_result", (room_info) => {
     playerIDs = room.PlayerIDs;
     console.log(playerIDs);
     playerIDs = playerIDs.split(',');
-    PlayerIDs = playerIDs;
     $.each(playerIDs, function(i,data){
         GetProfile(this).then((response) => {
             console.log(response);

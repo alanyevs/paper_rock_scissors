@@ -1,3 +1,33 @@
+function exit_room(records, won) {
+    records = JSON.parse(records);
+    GetProfile(UserID).then((response) => {
+        let data = response.data
+        if (won) {
+            data.WinCount = (parseInt(data.WinCount) + 1).toString();
+        }
+        data.GameCount = (parseInt(data.GameCount) + 1).toString();
+        data.GamePlayed.push(records);
+        console.log(data);
+        EditProfile(data).then((response) => {
+            console.log("response is ", response);
+            window.location.href = "/result/win"
+        })
+        .catch((error) => {
+            console.log("error is ", error);
+        });
+    })
+    .catch((error) => {
+        console.log("error is ", error);
+    });
+    
+}
+
+function EndGame(result) {
+    if (result == "win") {
+        socket.emit("exit_room", {"Status": "Deleting"});
+    }
+}
+
 function option_click(){
     $(".option").css("visibility","hidden")
     $(this).css("visibility","visible")
@@ -5,20 +35,22 @@ function option_click(){
     socket.emit("my_action",{"action": $(this).attr("op"), "round":round})
 }
 
-socket.on("end_game_success", function(records) {
-    records = JSON.parse(records);
-    // $.each(records, function(i, record){
-        
-    // })
-})
-
-function exit_game() {
-    // socket.emit("exit_room", {"Status": "Deleting"});
+function EditProfile(data) {
+    return sdk.profileEditPost({}, {user_id: UserID, profile_info: data}, {});
+    // return sdk.profileEditPost(JSON.stringify({"user_id": UserID, "profile_info": data}));
 }
 
 $(document).ready(function(){
     socket.on('test', function(data) {
         console.log(data)
+    })
+
+    socket.on("win_the_game", function(records) {
+        exit_room(records, true);
+    })
+    
+    socket.on("lose_the_game", function(records) {
+        exit_room(records, false);
     })
 
     $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
@@ -46,12 +78,8 @@ $(document).ready(function(){
             $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
 
             if (parseInt(status.my_score) > 3) {
-                EndGame()
-                window.location.href = "/result/win"
-            } else if (parseInt(status.op_score) > 3) {
-                EndGame()
-                window.location.href = "/result/lose"
-            } else {
+                EndGame("win")
+            } else if (parseInt(status.op_score) <= 3 && parseInt(status.my_score) <= 3) {
                 $("#opponent_action_container").empty()
                 $("#opponent_action_container").html(waiting_elements)
 

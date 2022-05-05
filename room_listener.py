@@ -12,8 +12,13 @@ API_URL = "https://pghvue5ynvgxhj2inkeou75hay.appsync-api.us-east-1.amazonaws.co
 API_KEY = "da2-afgsjsfxyregnltlv7frqf5wnq"
 
 # GraphQL subscription Registration object
-GQL_SUBSCRIPTION = json.dumps({
+GQL_SUBSCRIPTION_UPDATE = json.dumps({
         'query': 'subscription OnUpdateRoom { onUpdateRoom { __typename GameID PlayerIDs Capacity Status } }',
+        'variables': {}
+})
+
+GQL_SUBSCRIPTION_DELETE = json.dumps({
+        'query': 'subscription OnDeleteRoom { onDeleteRoom { __typename GameID PlayerIDs Capacity Status } }',
         'variables': {}
 })
 
@@ -57,6 +62,8 @@ api_header = {
 def on_message_id(id, emit_func):
     # Socket Event Callbacks, used in WebSocketApp Constructor
     def on_message(ws, message):
+        print("************************************************************************************")
+        print("room socket received message: ", message)
         global timeout_timer
         global timeout_interval
 
@@ -72,7 +79,7 @@ def on_message_id(id, emit_func):
             register = {
                 'id': id,
                 'payload': {
-                    'data': GQL_SUBSCRIPTION,
+                    'data': GQL_SUBSCRIPTION_UPDATE,
                     'extensions': {
                         'authorization': {
                             'host':HOST,
@@ -82,6 +89,25 @@ def on_message_id(id, emit_func):
                 },
                 'type': 'start'
             }
+
+            start_sub = json.dumps(register)
+            # print('>> '+ start_sub )
+            ws.send(start_sub)
+
+            register = {
+                'id': str(uuid4()),
+                'payload': {
+                    'data': GQL_SUBSCRIPTION_DELETE,
+                    'extensions': {
+                        'authorization': {
+                            'host':HOST,
+                            'x-api-key':API_KEY
+                        }
+                    }
+                },
+                'type': 'start'
+            }
+
             start_sub = json.dumps(register)
             # print('>> '+ start_sub )
             ws.send(start_sub)
