@@ -7,11 +7,16 @@ socket.on("join_room_success", () => {
     window.location.href="../room";
 })
 
+socket.on("join_room_failed", () => {
+    alert("The number of people in the room has reached the capacity and you can't join the game.");
+})
+
 function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
 socket.on("list_rooms_results", (rooms) => {
+    $("#lobby_container").empty()
     console.log(rooms);
     var rooms = JSON.parse(rooms);
 
@@ -39,9 +44,11 @@ socket.on("list_rooms_results", (rooms) => {
             c = $("<div class='col-2'>");
             c.html(room.Status);
             r.append(c);
-            c = $("<div class='col-3'>");
-            r.append(c);
-            c = $('<button type="button" class="btn" onclick="joinRoom(\'' +gameID+ '\')">Join</button>');
+            c = $("<div class='offset-4 col-1 p-0'>");
+            // c.css("margin-right","0")
+            let b = $('<button type="button" class="btn" onclick="joinRoom(\'' +gameID+ '\')">Join</button>');
+            b.css("width","100%")
+            c.append(b);
             r.append(c);
             $("#lobby_container").append(r);
         })

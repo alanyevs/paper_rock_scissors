@@ -62,7 +62,9 @@ def on_message_id(id, emit_func):
 
         message_object = json.loads(message)
         message_type   = message_object['type']
-
+        print("************************************************************************************")
+        print("action socket received message: ", message)
+        print("the type of message is ", message_type)
         if( message_type == 'ka' ):
             reset_timer(ws)
 

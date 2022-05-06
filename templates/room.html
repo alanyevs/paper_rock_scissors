@@ -5,6 +5,7 @@
     var sdk = apigClientFactory.newClient({});
     var GameID = "{{game_id}}";
     var UserID = "{{user_id}}";
+    var PlayerIDs = null;
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script> let socket = io(); </script>
@@ -14,27 +15,6 @@
 {% endblock %}
 
 {% block body %}
-
-{# <div class="container">
-    <div class="row mt-5">
-        <div class="col-2 offset-6">
-            <button type="button" class="btn btn-outline-dark" onclick="start_game()">Start</button>
-            <button type="button" class="btn btn-outline-dark" onclick="exit_game()">Exit</button>
-        </div>
-
-    </div>
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col-1"> UserName </div>
-            <div class="col-2"> WinRate </div>
-        </div>
-    </div>
-
-
-    <div class="container content shadow mt-1" id="room_container">
-    </div>
-
-</div> #}
 
 <div class="container">
     <h1 class="row display-2 d-flex justify-content-center mt-5">
@@ -51,11 +31,12 @@
             <div class="row d-flex justify-content-center" style="height: 140px;">
                 <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
                     <img src="../static/sucai/user0.png" alt="" 
-                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;"
+                class="room_player_avatar">
                 </div>
             </div>
             <div class="row text-center" style="height: 60px;">
-                <span style="font-size: 20pt;">Open</span>
+                <span style="font-size: 20pt;" class="room_player_name">Open</span>
             </div>
         </div>
         <div class="col-3">
@@ -63,11 +44,12 @@
             <div class="row d-flex justify-content-center" style="height: 140px;">
                 <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
                     <img src="../static/sucai/user0.png" alt="" 
-                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;"
+                class="room_player_avatar">
                 </div>
             </div>
             <div class="row text-center" style="height: 60px;">
-                <span style="font-size: 20pt;">Open</span>
+                <span style="font-size: 20pt;" class="room_player_name">Open</span>
             </div>
         </div>
         <div class="col-3">
@@ -75,11 +57,12 @@
             <div class="row d-flex justify-content-center" style="height: 140px;">
                 <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
                     <img src="../static/sucai/stop.png" alt="" 
-                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;"
+                class="room_player_avatar">
                 </div>
             </div>
             <div class="row text-center" style="height: 60px;">
-                <span style="font-size: 20pt;">Closed</span>
+                <span style="font-size: 20pt;" class="room_player_name">Closed</span>
             </div>
         </div>
         <div class="col-3">
@@ -87,18 +70,19 @@
             <div class="row d-flex justify-content-center" style="height: 140px;">
                 <div class="rounded-circle shadow-lg p-0" style="width: 140px; height: 140px;">
                     <img src="../static/sucai/stop.png" alt="" 
-                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;">
+                style="width: 140px; height: 140px; border-radius: 50%; padding: 0;"
+                class="room_player_avatar">
                 </div>
             </div>
             <div class="row text-center" style="height: 60px;">
-                <span style="font-size: 20pt;">Closed</span>
+                <span style="font-size: 20pt;" class="room_player_name">Closed</span>
             </div>
         </div>
     </div>
     <div class="row mt-5 justify-content-end">
         <div class="col-2">
             <div class="row">
-                <button type="button" class="btn btn-outline-primary" onclick="start_game()" style="height:50px">Start</button>
+                <button type="button" class="btn btn-outline-primary" onclick="start_game()" style="height:50px" id="room_start_btn" disabled>Start</button>
             </div>
         </div>
         <div class="mx-3 col-2">

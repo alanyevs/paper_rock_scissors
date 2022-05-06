@@ -2,35 +2,30 @@ function GetProfile(UserID) {
     return sdk.profileGet({"UserID": UserID});
 }
 
-socket.on("get_room_result", (room) => {
-    console.log(room);
-    var room = JSON.parse(room);
-    var playerIDs = room.PlayerIDs;
-    console.log(playerIDs, PlayerIDs);
-    if (playerIDs == PlayerIDs) {
-        return;
-    } else {
-        PlayerIDs = playerIDs;
-    }
+let playerIDs = null
+
+socket.on("get_room_result", (room_info) => {
+    console.log(room_info);
+    let room = JSON.parse(room_info);
+    playerIDs = room.PlayerIDs;
+    console.log(playerIDs);
     playerIDs = playerIDs.split(',');
-    for (let i = 0; i < playerIDs.length; i++) {
-        GetProfile(playerIDs[i])
-        .then((response) => {
+    $.each(playerIDs, function(i,data){
+        GetProfile(this).then((response) => {
             console.log(response);
             let data = response.data;
-            var r = $("<div class='row'>");
-            var c = $("<div class='col-1'>");
-            c.html(data.UserName);
-            r.append(c);
-            c = $("<div class='col-2'>");
-            // TODO: replace the winrate with the one extracted from the user profile
-            c.html("100");
-            r.append(c);
-            $("#room_container").append(r);
+            $(".room_player_avatar").eq(i).attr("src", GetAvatarPath(data.AvatarIndex));
+            $(".room_player_name").eq(i).html(data.UserName);
         })
         .catch((error) => {
             console.log(error);
         });
+    })
+
+    if (playerIDs.length == 2 && playerIDs[0] == UserID) {
+        $("#room_start_btn").prop("disabled",false);
+    } else {
+        $("#room_start_btn").prop("disabled",true);
     }
 });
 
@@ -43,11 +38,11 @@ socket.on("refresh_room", () => {
 
 function start_game() {
     console.log("starting game");
-    socket.emit("update_room", {"Status": "Playing", "PlayerIDs": PlayerIDs});
+    socket.emit("update_room", {"Status": "Playing", "PlayerIDs": playerIDs});
 }
 
 socket.on("start_game_success", () => {
-    PlayerIDs = null;
+    playerIDs = null
     console.log("starting game sucess");
     window.location.href="/play";
 })
@@ -58,7 +53,7 @@ function exit_game() {
 }
 
 socket.on("exit_room_success", () => {
-    PlayerIDs = null;
+    playerIDs = null
     window.location.href="/lobby";
 })
 

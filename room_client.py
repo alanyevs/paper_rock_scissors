@@ -63,7 +63,6 @@ def list_rooms():
     response = conn.getresponse()
     response = response.read().decode('utf-8')
     response = json.loads(response)
-    print(response)
     
     rooms = response['data']['listRooms']['items']
     return rooms
@@ -98,8 +97,13 @@ def join_room(gameID, playerID):
 
     for room in rooms:
         if room['GameID'] == gameID:
-            playerIDs = room['PlayerIDs'] + ',' + playerID
+            playerIDs = room['PlayerIDs']
             capacity = room['Capacity']
+
+            if len(playerIDs.split(',')) == capacity:
+                return False
+            
+            playerIDs = playerIDs + ',' + playerID
             status = room['Status']
             # the status could only be preparing
             assert(status == "Preparing")
