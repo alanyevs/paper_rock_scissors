@@ -213,6 +213,8 @@ def room():
 
 @app.route('/logout')
 def log_out():
+    global my_id
+    my_id = None
     return redirect("https://playerx.auth.us-east-1.amazoncognito.com/logout?response_type=code&client_id=ie9nhbqo6337pllabr0q4nsmd&redirect_uri=http://localhost:8888/lobby")
 
 ######################### helper functions of lobby #########################
