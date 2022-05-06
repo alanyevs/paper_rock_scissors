@@ -114,17 +114,15 @@ def room_listener():
                 playerIDs = playerIDs.split(',')
                 playerIDs.remove(my_id)
                 op_ids = playerIDs
+                print("############################################################")
+                print("opids is ", op_ids)
                 send_play.start(my_id, game_id)
                 socketio.emit("start_game_success", '')
         else:
             op_ids = None
             game_id = None
             send_play.delete(my_id)
-            if won:
-                won = False
-                socketio.emit("win_the_game", json.dumps(current_game_status))
-            else:
-                socketio.emit("lose_the_game", json.dumps(current_game_status))
+            socketio.emit("end_the_game", json.dumps(current_game_status))
             current_game_status = {str(k):dict() for k in range(1,10)}
 
     register_id = str(uuid.uuid4())
@@ -149,7 +147,7 @@ def play():
     if not my_id:
         return render_template('login.html')
     else:
-        return render_template('play.html', user_id = my_id)
+        return render_template('play.html', user_id = my_id, op_id = op_ids[0])
 
 @socketio.on('my_action')
 def handle_my_action(data):
@@ -261,10 +259,7 @@ def exit(data):
         game_id = None
         socketio.emit("exit_room_success", '')
     elif status == "Deleting":
-        print("************************************************************************************")
-        print("ending game")
-        won = True
-        exit_room(game_id, my_id, "Deleting")
+        exit_room(game_id, my_id, 'Deleting')
 
 @socketio.on("update_gameid")
 def update_gameid(data):

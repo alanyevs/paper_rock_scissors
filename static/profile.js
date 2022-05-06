@@ -60,30 +60,34 @@ $(document).ready(function(){
         $("#user_id").html(data.UserName)
         $("#user_avatar").attr("src", GetAvatarPath(data.AvatarIndex)) // TODO: 头像
         $("#win_count").html(data.WinCount)
-        $("#game_count").html(data.GameCount)
+        $("#game_count").html(data.GamesCount)
         $("#level").html(temp.level)  // ???? TODO: 等级
-        $("#p_wr").html(temp.paper_rate)  // TODO: 算概率
-        $("#r_wr").html(temp.rock_rate)
-        $("#s_wr").html(temp.scissors_rate)
+        $("#p_wr").html(data.NumOfPaper)  // TODO: 算概率
+        $("#r_wr").html(data.NumOfRock)
+        $("#s_wr").html(data.NumOfScissor)
+
+        $.each(data.GamesPlayed, function(i, d){
+            let r = $("<div class='row'>")
+            let c = $("<div class='col-1'>")
+            c.html(d.roomid)
+            r.append(c)
+            c = $("<div class='col-2'>")
+            c.html('Paper-Rock-Scissor')
+            r.append(c)
+            c = $("<div class='col-2'>")
+            c.html(d[0])
+            r.append(c)
+            c = $("<div class='col-2'>")
+            c.html(d[1])
+            r.append(c)
+            c = $("<div class='col-2'>")
+            c.html(d[2])
+            r.append(c)
+            $("#recent_container").append(r)
+        })
     })
     .catch((error) => {
         console.log(error);
     });
-    $.each(temp.recent_games, function(i, d){
-        let r = $("<div class='row'>")
-        let c = $("<div class='col-1'>")
-        c.html(d.roomid)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.creator)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.people)
-        r.append(c)
-        c = $("<div class='col-2'>")
-        c.html(d.game)
-        r.append(c)
-        $("#recent_container").append(r)
-    })
 
 })
