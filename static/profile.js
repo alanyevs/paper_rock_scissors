@@ -1,5 +1,4 @@
 let temp = {
-    //"avatar": "https://m.media-amazon.com/images/I/816p9XkbMQL._SL1427_.jpg",
     "avatar": "static/sucai/avatars/IMG_3.jpg",
     "user_id": "alanyevs",
     "winning_rate": "20%",
