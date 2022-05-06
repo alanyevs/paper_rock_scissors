@@ -62,13 +62,14 @@ api_header = {
 def on_message_id(id, emit_func):
     # Socket Event Callbacks, used in WebSocketApp Constructor
     def on_message(ws, message):
-        print("************************************************************************************")
-        print("room socket received message: ", message)
         global timeout_timer
         global timeout_interval
 
         message_object = json.loads(message)
         message_type   = message_object['type']
+        print("************************************************************************************")
+        print("room socket received message: ", message)
+        print("the type of message is ", message_type)
 
         if( message_type == 'ka' ):
             reset_timer(ws)

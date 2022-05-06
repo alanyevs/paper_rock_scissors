@@ -100,8 +100,6 @@ def action_listener():
 
 def room_listener():
     def update_room(message):
-        print("************************************************************************************")
-        print(message)
         global won
         global op_ids
         global game_id
@@ -128,8 +126,6 @@ def room_listener():
             else:
                 socketio.emit("lose_the_game", json.dumps(current_game_status))
             current_game_status = {str(k):dict() for k in range(1,10)}
-            print("************************************************************************************")
-            print(current_game_status)
 
     register_id = str(uuid.uuid4())
     socket = room_socket(register_id, update_room)

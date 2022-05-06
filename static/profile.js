@@ -20,8 +20,20 @@ function GetProfile(UserID) {
 }
 
 function SubmitChange(NewUserName, ava){
-    // TODO: submit the id to aws db
-    console.log(NewUserName)
+    GetProfile(UserID).then((response) => {
+        let data = response.data
+        data.UserName = NewUserName;
+        console.log(data);
+        sdk.profileEditPost({}, {user_id: UserID, profile_info: data}, {}).then((response) => {
+            console.log("response is ", response);
+        })
+        .catch((error) => {
+            console.log("error is ", error);
+        });
+    })
+    .catch((error) => {
+        console.log("error is ", error);
+    });
 }
 
 function EditProfile(){

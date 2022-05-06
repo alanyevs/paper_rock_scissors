@@ -63,7 +63,6 @@ def list_rooms():
     response = conn.getresponse()
     response = response.read().decode('utf-8')
     response = json.loads(response)
-    print(response)
     
     rooms = response['data']['listRooms']['items']
     return rooms
