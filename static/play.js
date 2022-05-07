@@ -119,7 +119,7 @@ $(document).ready(function(){
     setInterval(function () {
         remain_time--;
         if (remain_time > 0) {
-            $('.progress-bar').css('width', remain_time/30 + '%');
+            $('.progress-bar').css('width', remain_time/3*10 + '%');
         } else {
             exit_room()
         }
