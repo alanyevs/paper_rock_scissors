@@ -2,6 +2,9 @@ function exit_room(records) {
     if (Result == null) {
         alert("The game is ended, returning to the lobby.");
         window.location.href = "/lobby"
+    } else if (Result == "timeout") {
+        alert("Your opponent loses connection, returning to the lobby.");
+        window.location.href = "/lobby"
     } else {
         records = JSON.parse(records);
         GetProfile(UserID).then((response) => {
@@ -52,8 +55,8 @@ $(document).ready(function(){
     .then((response) => {
         let data = response.data;
         console.log(GetAvatarPath(data.AvatarIndex));
-        $("#my_avator").attr("src", GetAvatarPath(data.AvatarIndex))
-        $("#my_name").html(data.UserName)
+        $("#play_my_avator").attr("src", GetAvatarPath(data.AvatarIndex))
+        $("#play_my_name").html(data.UserName)
     })
     .catch((error) => {
         console.log(error);
@@ -63,8 +66,8 @@ $(document).ready(function(){
     .then((response) => {
         let data = response.data;
         console.log(GetAvatarPath(data.AvatarIndex));
-        $("#op_avatar").attr("src", GetAvatarPath(data.AvatarIndex))
-        $("#op_name").html(data.UserName)
+        $("#play_op_avator").attr("src", GetAvatarPath(data.AvatarIndex))
+        $("#play_op_name").html(data.UserName)
     })
     .catch((error) => {
         console.log(error);
@@ -139,8 +142,15 @@ $(document).ready(function(){
         if (remain_time > 0) {
             $('.progress-bar').css('width', remain_time/3 + '%');
         } else {
-            EndGame()
+            Result = "timeout"
             clearInterval(timer)
+            EndGame()
         }
     }, 100);
+
+    window.onbeforeunload = function(){
+        EndGame()
+        Result = "timeout"
+        return 'Leave the page will end the game. Are you sure you want to leave?';
+    };
 })
