@@ -1,7 +1,3 @@
-// function sleep (time) {
-//     return new Promise((resolve) => setTimeout(resolve, time));
-// }
-
 function exit_room(records) {
     if (Result == null) {
         alert("The game is ended, returning to the lobby.");
@@ -51,6 +47,29 @@ let remain_time = 30
 
 $(document).ready(function(){
     console.log(OpID);
+
+    GetProfile(UserID)
+    .then((response) => {
+        let data = response.data;
+        console.log(GetAvatarPath(data.AvatarIndex));
+        $("#my_avator").attr("src", GetAvatarPath(data.AvatarIndex))
+        $("#my_name").html(data.UserName)
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+    GetProfile(OpID)
+    .then((response) => {
+        let data = response.data;
+        console.log(GetAvatarPath(data.AvatarIndex));
+        $("#op_avatar").attr("src", GetAvatarPath(data.AvatarIndex))
+        $("#op_name").html(data.UserName)
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
     socket.on('test', function(data) {
         console.log(data)
     })
@@ -114,14 +133,14 @@ $(document).ready(function(){
 
     remain_time = 300;
 
-    setInterval(function () {
+    var timer = setInterval(function () {
         remain_time--;
         if (remain_time > 0) {
             $('.progress-bar').css('width', remain_time/3 + '%');
         } else {
             Result = null
             exit_room(1)
+            clearInterval(timer)
         }
-
     }, 100);
 })
