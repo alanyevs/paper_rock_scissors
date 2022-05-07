@@ -144,7 +144,9 @@ $(document).ready(function(){
         }
     }, 100);
 
-    window.onunload = function(){
+    window.onbeforeunload = function(){
         EndGame()
+        console.log("exit")
+        return null
     };
 })
