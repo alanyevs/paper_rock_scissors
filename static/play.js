@@ -1,36 +1,34 @@
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
+// function sleep (time) {
+//     return new Promise((resolve) => setTimeout(resolve, time));
+// }
 
 function exit_room(records) {
     if (Result == null) {
         alert("The game is ended, returning to the lobby.");
-        sleep(3).then(() => {
-            window.location.href = "/lobby"
-        })
-    }
-    records = JSON.parse(records);
-    GetProfile(UserID).then((response) => {
-        let data = response.data
-        if (Result == 'win') {
-            data.WinCount = (parseInt(data.WinCount) + 1).toString();
-        }
-        data.GamesCount = (parseInt(data.GamesCount) + 1).toString();
-        data['Result'] = Result;
-        data['Record'] = records;
-        console.log(data);
-        EditProfile(data).then((response) => {
-            console.log("response is ", response);
-            window.location.href = "/result/win"
+        window.location.href = "/lobby"
+    } else {
+        records = JSON.parse(records);
+        GetProfile(UserID).then((response) => {
+            let data = response.data
+            if (Result == 'win') {
+                data.WinCount = (parseInt(data.WinCount) + 1).toString();
+            }
+            data.GamesCount = (parseInt(data.GamesCount) + 1).toString();
+            data['Result'] = Result;
+            data['Record'] = records;
+            console.log(data);
+            EditProfile(data).then((response) => {
+                console.log("response is ", response);
+                window.location.href = "/result/win"
+            })
+            .catch((error) => {
+                console.log("error is ", error);
+            });
         })
         .catch((error) => {
             console.log("error is ", error);
         });
-    })
-    .catch((error) => {
-        console.log("error is ", error);
-    });
-    
+    }
 }
 
 function EndGame() {
@@ -114,15 +112,16 @@ $(document).ready(function(){
         $(".option").click(option_click)
     },400); 
 
-    remain_time = 30;
+    remain_time = 300;
 
     setInterval(function () {
         remain_time--;
         if (remain_time > 0) {
-            $('.progress-bar').css('width', remain_time/3*10 + '%');
+            $('.progress-bar').css('width', remain_time/3 + '%');
         } else {
-            exit_room()
+            Result = null
+            exit_room(1)
         }
 
-    }, 1000);
+    }, 100);
 })
