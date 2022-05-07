@@ -2,9 +2,6 @@ function exit_room(records) {
     if (Result == null) {
         alert("The game is ended, returning to the lobby.");
         window.location.href = "/lobby"
-    } else if (Result == "timeout") {
-        alert("Your opponent loses connection, returning to the lobby.");
-        window.location.href = "/lobby"
     } else {
         records = JSON.parse(records);
         GetProfile(UserID).then((response) => {
@@ -142,15 +139,12 @@ $(document).ready(function(){
         if (remain_time > 0) {
             $('.progress-bar').css('width', remain_time/3 + '%');
         } else {
-            Result = "timeout"
             clearInterval(timer)
             EndGame()
         }
     }, 100);
 
-    window.onbeforeunload = function(){
+    window.onunload = function(){
         EndGame()
-        Result = "timeout"
-        return 'Leave the page will end the game. Are you sure you want to leave?';
     };
 })
