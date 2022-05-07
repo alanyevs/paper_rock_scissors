@@ -49,6 +49,8 @@ function EditProfile(data) {
     // return sdk.profileEditPost(JSON.stringify({"user_id": UserID, "profile_info": data}));
 }
 
+let remain_time = 30
+
 $(document).ready(function(){
     console.log(OpID);
     socket.on('test', function(data) {
@@ -82,6 +84,7 @@ $(document).ready(function(){
         setTimeout(function(){
             $("#opponent_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
             $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
+            remain_time = 30
 
             if (parseInt(status.my_score) > 3) {
                 Result = 'win';
@@ -110,4 +113,16 @@ $(document).ready(function(){
     setTimeout(function(){
         $(".option").click(option_click)
     },400); 
+
+    remain_time = 30;
+
+    setInterval(function () {
+        remain_time--;
+        if (remain_time > 0) {
+            $('.progress-bar').css('width', remain_time/30 + '%');
+        } else {
+            exit_room()
+        }
+
+    }, 1000);
 })
