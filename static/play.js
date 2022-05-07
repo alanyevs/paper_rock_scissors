@@ -15,7 +15,7 @@ function exit_room(records) {
             console.log(data);
             EditProfile(data).then((response) => {
                 console.log("response is ", response);
-                window.location.href = "/result/win"
+                window.location.href = "/result/"+Result
             })
             .catch((error) => {
                 console.log("error is ", error);
@@ -101,13 +101,14 @@ $(document).ready(function(){
         setTimeout(function(){
             $("#opponent_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
             $("#my_action_container").css("box-shadow","0 .5rem 1rem rgba(0,0,0,.15)")
-            remain_time = 30
+            remain_time = 300
 
             if (parseInt(status.my_score) > 3) {
                 Result = 'win';
                 EndGame()
             } else if (parseInt(status.op_score) > 3) {
                 Result = 'lose';
+                EndGame()
             } else {
                 $("#opponent_action_container").empty()
                 $("#opponent_action_container").html(waiting_elements)
@@ -138,8 +139,7 @@ $(document).ready(function(){
         if (remain_time > 0) {
             $('.progress-bar').css('width', remain_time/3 + '%');
         } else {
-            Result = null
-            exit_room(1)
+            EndGame()
             clearInterval(timer)
         }
     }, 100);
