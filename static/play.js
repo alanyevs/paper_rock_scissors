@@ -147,6 +147,6 @@ $(document).ready(function(){
     window.onbeforeunload = function(){
         EndGame()
         console.log("exit")
-        return null
+        return "leave will end the game"
     };
 })
