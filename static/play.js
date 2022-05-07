@@ -144,9 +144,16 @@ $(document).ready(function(){
         }
     }, 100);
 
-    window.onbeforeunload = function(){
+
+    $(window).on('beforeunload', function() {
         EndGame()
-        console.log("exit")
-        return "leave will end the game"
-    };
+        return "The game is ended, returning to the lobby.";
+    });
+
+    // window.onbeforeunload = function(){
+    //     EndGame()
+    //     console.log("exit")
+    //     alert("The game is ended, returning to the lobby.");
+    //     return null
+    // };
 })

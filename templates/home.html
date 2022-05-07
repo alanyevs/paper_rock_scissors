@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 
-{% block head %} <title>Login</title> {% endblock %}
+{% block head %} 
+<title>Home</title> 
+<script>
+    var sdk = apigClientFactory.newClient({});
+    var UserID = "{{user_id}}";
+</script>
+{% endblock %}
 
 {% block body %}
     <div class="container">
