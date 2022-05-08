@@ -1,4 +1,4 @@
-let logo_path = "static/sucai/logo.png"
+// let logo_path = "static/sucai/logo.png"
 
 function GetAvatarPath(AvatarIndex) {
     return "static/sucai/avatars/IMG_"+ AvatarIndex +".jpg";
@@ -9,7 +9,7 @@ function GetProfile(UserID) {
 }
 
 $(document).ready(function(){
-    $("#logo").attr("src", logo_path)
+    // $("#logo").attr("src", logo_path)
     GetProfile(UserID)
     .then((response) => {
         let data = response.data;

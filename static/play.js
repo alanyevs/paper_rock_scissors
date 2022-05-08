@@ -104,9 +104,11 @@ $(document).ready(function(){
             remain_time = 300
 
             if (parseInt(status.my_score) > 3) {
+                window.onbeforeunload = null;
                 Result = 'win';
                 EndGame()
             } else if (parseInt(status.op_score) > 3) {
+                window.onbeforeunload = null;
                 Result = 'lose';
                 EndGame()
             } else {
@@ -150,10 +152,4 @@ $(document).ready(function(){
         return "The game is ended, returning to the lobby.";
     });
 
-    // window.onbeforeunload = function(){
-    //     EndGame()
-    //     console.log("exit")
-    //     alert("The game is ended, returning to the lobby.");
-    //     return null
-    // };
 })
