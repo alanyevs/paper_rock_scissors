@@ -22,7 +22,7 @@ $(document).ready(function(){
             c.html(d.Score)
             r.append(c)
             c = $("<div class='col-2'>")
-            c.html(d.GameCount)
+            c.html(d.GamesCount)
             r.append(c)
             $("#leaderboard_container").append(r)
         })
