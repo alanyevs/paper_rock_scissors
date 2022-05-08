@@ -1,11 +1,12 @@
-let update_time = "Feb 27, 2022 16:30PM (EST)"
+// let update_time = "Feb 27, 2022 16:30PM (EST)"
 
 function GetRank() {
     return sdk.leaderboardGet({}, {}, {});
 }
 
 $(document).ready(function(){
-    $("#last_update").html("Last update: " + update_time)
+    let current = new Date();
+    $("#last_update").html("Last update: " + current.toLocaleString())
     GetRank()
     .then((response) => {
         console.log(response);
