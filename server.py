@@ -119,7 +119,7 @@ def room_listener():
                 print("opids is ", op_ids)
                 send_play.start(my_id, game_id)
                 socketio.emit("start_game_success", '')
-        else:
+        elif message["payload"]["data"]["onDeleteRoom"]["GameID"] == game_id:
             op_ids = None
             game_id = None
             send_play.delete(my_id)
