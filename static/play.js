@@ -104,11 +104,9 @@ $(document).ready(function(){
             remain_time = 300
 
             if (parseInt(status.my_score) > 3) {
-                window.onbeforeunload = null;
                 Result = 'win';
                 EndGame()
             } else if (parseInt(status.op_score) > 3) {
-                window.onbeforeunload = null;
                 Result = 'lose';
                 EndGame()
             } else {
@@ -145,11 +143,5 @@ $(document).ready(function(){
             EndGame()
         }
     }, 100);
-
-
-    $(window).on('beforeunload', function() {
-        EndGame()
-        return "The game is ended, returning to the lobby.";
-    });
 
 })

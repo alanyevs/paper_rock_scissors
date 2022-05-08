@@ -89,15 +89,12 @@ $(document).ready(function(){
         }
 
         
-
+        $("#recent_container").empty()
         $.each(data.GamesPlayed, function(i, d){
             GetProfile(d[0])
             .then((response) => {
                 let r = $("<div class='row'>")
-                let c = $("<div class='col-1'>")
-                c.html(d.roomid)
-                r.append(c)
-                c = $("<div class='col-2'>")
+                let c = $("<div class='col-2'>")
                 c.html('Paper-Rock-Scissor')
                 r.append(c)
                 c = $("<div class='col-2'>")
