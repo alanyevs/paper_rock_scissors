@@ -35,7 +35,7 @@ my_thread = None
 my_thread_lock = Lock()
 
 status_lock = Lock()
-current_game_status = {str(k):dict() for k in range(1,10)}
+current_game_status = {str(k):dict() for k in range(1,100)}
 
 op_ids = None
 my_id = None
@@ -124,7 +124,7 @@ def room_listener():
             game_id = None
             send_play.delete(my_id)
             socketio.emit("end_the_game", json.dumps(current_game_status))
-            current_game_status = {str(k):dict() for k in range(1,10)}
+            current_game_status = {str(k):dict() for k in range(1,100)}
 
     register_id = str(uuid.uuid4())
     socket = room_socket(register_id, update_room)
