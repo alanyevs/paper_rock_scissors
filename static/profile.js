@@ -60,6 +60,26 @@ function ChangeAvatar(){
 
 let anum = 0;
 
+async function Loadrecord(data) {
+    for(d of data.GamesPlayed.reverse().slice(0, 5)) {
+        let response = await GetProfile(d[0]);
+        let r = $("<div class='row'>")
+        let c = $("<div class='col-2'>")
+        c.html('Paper-Rock-Scissor')
+        r.append(c)
+        c = $("<div class='col-2'>")
+        c.html(response.data.UserName)
+        r.append(c)
+        c = $("<div class='col-2'>")
+        c.html(d[1])
+        r.append(c)
+        c = $("<div class='col-2'>")
+        c.html(d[2])
+        r.append(c)
+        $("#recent_container").append(r)
+    }
+};
+
 $(document).ready(function(){
     $("#edit_btn").click(EditProfile)
     $('#user_avatar').off('click')
@@ -90,28 +110,30 @@ $(document).ready(function(){
 
         
         $("#recent_container").empty()
-        $.each(data.GamesPlayed, function(i, d){
-            GetProfile(d[0])
-            .then((response) => {
-                let r = $("<div class='row'>")
-                let c = $("<div class='col-2'>")
-                c.html('Paper-Rock-Scissor')
-                r.append(c)
-                c = $("<div class='col-2'>")
-                c.html(response.data.UserName)
-                r.append(c)
-                c = $("<div class='col-2'>")
-                c.html(d[1])
-                r.append(c)
-                c = $("<div class='col-2'>")
-                c.html(d[2])
-                r.append(c)
-                $("#recent_container").append(r)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        })
+        Loadrecord(data);
+
+        // $.each(data.GamesPlayed, function(i, d){
+        //     GetProfile(d[0])
+        //     .then((response) => {
+        //         let r = $("<div class='row'>")
+        //         let c = $("<div class='col-2'>")
+        //         c.html('Paper-Rock-Scissor')
+        //         r.append(c)
+        //         c = $("<div class='col-2'>")
+        //         c.html(response.data.UserName)
+        //         r.append(c)
+        //         c = $("<div class='col-2'>")
+        //         c.html(d[1])
+        //         r.append(c)
+        //         c = $("<div class='col-2'>")
+        //         c.html(d[2])
+        //         r.append(c)
+        //         $("#recent_container").append(r)
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     })
+        // })
     })
     .catch((error) => {
         console.log(error);
