@@ -1,0 +1,6 @@
+flask
+flask-socketio
+websocket-client
+simple-websocket
+flask_awscognito
+PyJWT
